@@ -57,3 +57,7 @@ bool lista_insertar_primero(lista_t *lista, void *dato){
     lista->largo++;
     return true;
 }
+
+void *lista_borrar_primero(lista_t *lista){
+    
+}

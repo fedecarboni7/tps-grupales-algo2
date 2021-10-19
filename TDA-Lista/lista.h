@@ -36,6 +36,8 @@ void lista_destruir(lista_t *lista, void (*destruir_dato)(void *));
 // principio de la lista.
 bool lista_insertar_primero(lista_t *lista, void *dato);
 
+void *lista_borrar_primero(lista_t *lista);
+
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
  * *****************************************************************/
