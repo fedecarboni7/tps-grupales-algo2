@@ -34,6 +34,10 @@ nodo_t* nodo_crear(void* dato) {
     return nodo;
 }
 
+bool lista_esta_vacia(lista_t lista) {
+    return lista->largo == 0;
+}
+
 void lista_destruir(lista_t *lista, void (*destruir_dato)(void *)) {
     while (!lista_esta_vacia(lista)) {
         void *elemento = lista_borrar_primero(lista);
@@ -58,6 +62,29 @@ bool lista_insertar_primero(lista_t *lista, void *dato){
     return true;
 }
 
+bool lista_insertar_ultimo(lista_t *lista, void *dato) {
+    nodo_t *nodo = nodo_crear(dato);
+    if (!nodo) return false;
+    if(lista_esta_vacia(lista)) {
+        return false;
+    }
+    lista->nodo_fin->prox = nodo;
+    lista->nodo_fin = nodo; 
+    lista->largo++;
+    return true;
+}
+
 void *lista_borrar_primero(lista_t *lista){
     
+}
+
+void *lista_ver_primero(const lista_t *lista) {
+    if (!lista_esta_vacia(lista)) {
+        return lista->nodo_inicio->dato;
+    }
+    return NULL; 
+}
+
+size_t lista_largo(const lista_t *lista) {
+    return lista->largo;
 }
