@@ -59,5 +59,25 @@ bool lista_insertar_primero(lista_t *lista, void *dato){
 }
 
 void *lista_borrar_primero(lista_t *lista){
-    
+    if (lista_esta_vacia(lista)) return NULL;
+    void* dato_anterior = lista->nodo_inicio->dato;
+    nodo_t* nodo_aux = lista->nodo_inicio;
+    if (lista->largo == 1) {
+        lista->nodo_inicio = NULL;
+        lista->nodo_fin = NULL;
+    }
+    else {
+        lista->nodo_inicio = lista->nodo_inicio->siguiente;
+    }
+    lista->largo--;
+    free(nodo_aux);
+    return dato_anterior;
 }
+
+void *lista_ver_ultimo(const lista_t* lista){
+    return lista_esta_vacia(lista) ? NULL : lista->nodo_fin->dato;
+}
+
+/* *****************************************************************
+ *                    PRIMITIVAS DEL ITERADOR
+ * *****************************************************************/

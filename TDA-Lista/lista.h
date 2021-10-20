@@ -36,7 +36,18 @@ void lista_destruir(lista_t *lista, void (*destruir_dato)(void *));
 // principio de la lista.
 bool lista_insertar_primero(lista_t *lista, void *dato);
 
+// Saca el primer elemento de la lista. Si la lista tiene elementos, se quita el
+// primero de la lista, y se devuelve su valor, si está vacía, devuelve NULL.
+// Pre: la lista fue creada.
+// Post: se devolvió el valor del primer elemento anterior, la lista
+// contiene un elemento menos, si la lista no estaba vacía.
 void *lista_borrar_primero(lista_t *lista);
+
+// Obtiene el valor del ultimo elemento de la lista. Si la lista tiene
+// elementos, se devuelve el valor del ultimo, si está vacía devuelve NULL.
+// Pre: la lista fue creada.
+// Post: se devolvió el ultimo elemento de la lista, cuando no está vacía.
+void *lista_ver_ultimo(const lista_t* lista);
 
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
