@@ -23,6 +23,10 @@ typedef struct lista_iter lista_iter_t;
 // Post: devuelve una nueva lista vacía.
 lista_t *lista_crear(void);
 
+// Devueve verdadero si la lista está vacía y falso si no lo está
+// Pre: la lista fue creada. 
+bool lista_esta_vacia(lista_t *lista);
+
 // Destruye la lista. Si se recibe la función destruir_dato por parámetro,
 // para cada uno de los elementos de la lista llama a destruir_dato.
 // Pre: la lista fue creada. destruir_dato es una función capaz de destruir
@@ -48,6 +52,22 @@ void *lista_borrar_primero(lista_t *lista);
 // Pre: la lista fue creada.
 // Post: se devolvió el ultimo elemento de la lista, cuando no está vacía.
 void *lista_ver_ultimo(const lista_t* lista);
+
+// Agrega un nuevo elemento al final de la lista. Devuelve false en caso de 
+// error.
+// Pre: la lista fue creada y no está vacía
+// Post: se agregó un nuevo elemento a la lista, el dato se encuentra al 
+// final de la lista.
+bool lista_insertar_ultimo(lista_t *lista, void *dato);
+
+// Devuelve el valor del primer elemento de la lista. Devuelve NULL si la 
+// lista está vacía
+// Pre: la lista fue creada y no está vacía
+void *lista_ver_primero(const lista_t *lista);
+
+// Devuelve el largo de la lista 
+// Pre: la lista fue creada
+size_t lista_largo(const lista_t *lista);
 
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
