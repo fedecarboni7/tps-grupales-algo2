@@ -75,6 +75,13 @@ size_t lista_largo(const lista_t *lista);
 
 void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra);
 
+lista_iter_t lista_iter_crear(lista_t *lista);
+
+void *lista_iter_ver_actual(const lista_iter_t *iter);
+
+void lista_iter_destruir(lista_iter_t *iter);
+
+void *lista_iter_borrar(lista_iter_t *iter);
 
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
