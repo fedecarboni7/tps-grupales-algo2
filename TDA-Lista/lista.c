@@ -16,7 +16,7 @@ typedef struct nodo {
     struct nodo* prox;    
 } nodo_t;
 
-// Definición del struct lista_iter
+// Definición del struct lista_iter.
 
 typedef struct lista_iter {
     lista_t* lista;
@@ -150,3 +150,14 @@ void *lista_iter_borrar(lista_iter_t *iter) {
     return dato_borrado;
 }
 
+bool lista_iter_avanzar(lista_iter_t *iter){
+
+}
+
+bool lista_iter_al_final(const lista_iter_t *iter){
+
+}
+
+bool lista_iter_insertar(lista_iter_t *iter, void *dato){
+
+}
