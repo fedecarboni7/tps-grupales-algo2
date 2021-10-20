@@ -69,6 +69,13 @@ void *lista_ver_primero(const lista_t *lista);
 // Pre: la lista fue creada
 size_t lista_largo(const lista_t *lista);
 
+/* ******************************************************************
+ *                    PRIMITIVAS DEL ITERADOR
+ * *****************************************************************/
+
+void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra);
+
+
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
  * *****************************************************************/
