@@ -54,7 +54,7 @@ void lista_destruir(lista_t *lista, void (*destruir_dato)(void *)) {
     free(lista);
 }
 
-bool lista_insertar_primero(lista_t *lista, void *dato){
+bool lista_insertar_primero(lista_t *lista, void *dato) {
     nodo_t* nodo = nodo_crear(dato);
     if (!nodo) return false;
     if (lista_esta_vacia(lista)) {
@@ -79,7 +79,7 @@ bool lista_insertar_ultimo(lista_t *lista, void *dato) {
     return true;
 }
 
-void *lista_borrar_primero(lista_t *lista){
+void *lista_borrar_primero(lista_t *lista) {
     if (lista_esta_vacia(lista)) return NULL;
     void* dato_anterior = lista->nodo_inicio->dato;
     nodo_t* nodo_aux = lista->nodo_inicio;
@@ -95,12 +95,12 @@ void *lista_borrar_primero(lista_t *lista){
     return dato_anterior;
 }
 
-void *lista_ver_ultimo(const lista_t* lista){
+void *lista_ver_ultimo(const lista_t* lista) {
     return lista_esta_vacia(lista) ? NULL : lista->nodo_fin->dato;
 }
 
 void *lista_ver_primero(const lista_t *lista) {
-    return lista_esta_vacia(lista) ? NULL : lista->nodo_inicio->dato; 
+    return lista_esta_vacia(lista) ? NULL : lista->nodo_inicio->dato;
 }
 
 size_t lista_largo(const lista_t *lista) {
@@ -123,7 +123,7 @@ lista_iter_t lista_iter_crear(lista_t *lista) {
 }
 
 void *lista_iter_ver_actual(const lista_iter_t *iter) {
-    return lista_esta_vacia(iter->lista) ? iter->actual->dato : NULL; 
+    return lista_esta_vacia(iter->lista) ? iter->actual->dato : NULL;
 }
 
 void lista_iter_destruir(lista_iter_t *iter) {
@@ -137,7 +137,7 @@ void *lista_iter_borrar(lista_iter_t *iter) {
     // Tengo que modificar el anterior al borrado para que apunte al próximo del borrado
     
     // Busco al anterior del nodo que quiero borrar
-    while(lista_iter_ver_actual(iter)->prox != nodo_borrado) {
+    while (lista_iter_ver_actual(iter)->prox != nodo_borrado) {
         lista_iter_avanzar(iter);
     }
 
@@ -148,14 +148,16 @@ void *lista_iter_borrar(lista_iter_t *iter) {
     return dato_borrado;
 }
 
-bool lista_iter_avanzar(lista_iter_t *iter){
-
+bool lista_iter_avanzar(lista_iter_t *iter) {
+    if (lista_iter_al_final(iter)) return false;
+    iter->actual = iter->actual->prox;
+    return true;
 }
 
-bool lista_iter_al_final(const lista_iter_t *iter){
-
+bool lista_iter_al_final(const lista_iter_t *iter) {
+    return iter->actual == iter->lista->nodo_fin;
 }
 
-bool lista_iter_insertar(lista_iter_t *iter, void *dato){
+bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
 
 }
