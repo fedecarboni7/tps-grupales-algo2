@@ -30,7 +30,7 @@ typedef struct lista_iter {
  * *****************************************************************/
 
 lista_t *lista_crear(void) {
-    lista_t *lista = calloc(1, sizeof(lista_t));
+    lista_t *lista = malloc(1, sizeof(lista_t));
     lista->largo = 0;
     lista->nodo_inicio = NULL;
     lista->nodo_fin = NULL;
@@ -127,7 +127,8 @@ lista_iter_t lista_iter_crear(lista_t *lista) {
     lista_iter_t *lista_iter = malloc(sizeof(lista_iter_t));
     if (!lista_iter) return NULL;
     lista_iter->lista = lista;
-    lista_iter->actual = lista->nodo_inicio; 
+    lista_iter->actual = lista->nodo_inicio;
+    lista_iter->anterior->prox = lista_iter->actual;
     return lista_iter; 
 }
 
@@ -141,7 +142,7 @@ void lista_iter_destruir(lista_iter_t *iter) {
 
 void *lista_iter_borrar(lista_iter_t *iter) {
     nodo_t *nodo_borrado = iter->actual;
-    iter->actual->anterior->prox = iter->actual->prox;
+    iter->anterior->prox = iter->actual->prox;
     lista_iter_avanzar(iter);
     return nodo_destruir(nodo_borrado);
 }
@@ -157,5 +158,10 @@ bool lista_iter_al_final(const lista_iter_t *iter) {
 }
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
-
+    nodo_t* nodo_insertar = nodo_crear(dato);
+    if (!nodo_insertar) return false;
+    iter->anterior->prox = nodo_insertar;
+    nodo_insertar->prox = iter->actual;
+    iter->actual = nodo_insertar;
+    return true;
 }
