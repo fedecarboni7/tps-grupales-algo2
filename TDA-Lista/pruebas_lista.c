@@ -1,4 +1,4 @@
-#include <lista.h>
+#include "lista.h"
 #include "testing.h"
 #include <stdio.h>
 

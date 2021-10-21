@@ -2,7 +2,7 @@
 #define LISTA_H
 
 #include <stdbool.h>
-
+#include <stddef.h>
 
 /* ******************************************************************
  *                DEFINICION DE LOS TIPOS DE DATOS
@@ -12,6 +12,7 @@
 
 struct lista;
 typedef struct lista lista_t;
+struct lista_iter;
 typedef struct lista_iter lista_iter_t;
 
 
@@ -25,7 +26,7 @@ lista_t *lista_crear(void);
 
 // Devuelve verdadero si la lista está vacía y falso si no lo está.
 // Pre: la lista fue creada. 
-bool lista_esta_vacia(lista_t *lista);
+bool lista_esta_vacia(const lista_t *lista);
 
 // Destruye la lista. Si se recibe la función destruir_dato por parámetro,
 // para cada uno de los elementos de la lista llama a destruir_dato.
@@ -75,7 +76,7 @@ size_t lista_largo(const lista_t *lista);
 
 void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra);
 
-lista_iter_t lista_iter_crear(lista_t *lista);
+lista_iter_t *lista_iter_crear(lista_t *lista);
 
 void *lista_iter_ver_actual(const lista_iter_t *iter);
 

@@ -1,6 +1,13 @@
 #include "lista.h"
 #include <stdlib.h>
 
+// Definición del struct nodo.
+
+typedef struct nodo {
+    void* dato;
+    struct nodo* prox;    
+} nodo_t;
+
 // Definición del struct lista.
 
 struct lista {
@@ -9,20 +16,13 @@ struct lista {
     size_t largo;
 };
 
-// Definición del struct nodo.
-
-typedef struct nodo {
-    void* dato;
-    struct nodo* prox;    
-} nodo_t;
-
 // Definición del struct lista_iter.
 
-typedef struct lista_iter {
+struct lista_iter {
     lista_t* lista;
     nodo_t* actual;
     nodo_t* anterior;
-} lista_iter_t;
+};
 
 
 /* *****************************************************************
@@ -30,7 +30,7 @@ typedef struct lista_iter {
  * *****************************************************************/
 
 lista_t *lista_crear(void) {
-    lista_t *lista = malloc(1, sizeof(lista_t));
+    lista_t *lista = malloc(sizeof(lista_t));
     lista->largo = 0;
     lista->nodo_inicio = NULL;
     lista->nodo_fin = NULL;
@@ -51,7 +51,7 @@ void* nodo_destruir(nodo_t *nodo) {
     return dato;
 }
 
-bool lista_esta_vacia(lista_t lista) {
+bool lista_esta_vacia(const lista_t *lista) {
     return lista->largo == 0;
 }
 
@@ -96,7 +96,7 @@ void *lista_borrar_primero(lista_t *lista) {
         lista->nodo_fin = NULL;
     }
     else {
-        lista->nodo_inicio = lista->nodo_inicio->siguiente;
+        lista->nodo_inicio = lista->nodo_inicio->prox;
     }
     lista->largo--;
     free(nodo_aux);
@@ -123,7 +123,7 @@ void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *e
     
 }
 
-lista_iter_t lista_iter_crear(lista_t *lista) {
+lista_iter_t *lista_iter_crear(lista_t *lista) {
     lista_iter_t *lista_iter = malloc(sizeof(lista_iter_t));
     if (!lista_iter) return NULL;
     lista_iter->lista = lista;
