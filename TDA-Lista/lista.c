@@ -21,6 +21,7 @@ typedef struct nodo {
 typedef struct lista_iter {
     lista_t* lista;
     nodo_t* actual;
+    nodo_t* anterior;
 } lista_iter_t;
 
 
@@ -60,7 +61,6 @@ bool lista_insertar_primero(lista_t *lista, void *dato) {
     if (lista_esta_vacia(lista)) {
         lista->nodo_inicio = nodo;
         lista->nodo_fin = nodo;
-        lista->nodo_inicio->prox = lista->nodo_fin;
     }
     else {
         nodo->prox = lista->nodo_inicio;
