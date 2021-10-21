@@ -45,6 +45,12 @@ nodo_t* nodo_crear(void* dato) {
     return nodo;
 }
 
+void* nodo_destruir(nodo_t *nodo) {
+    void *dato = nodo->dato;
+    free(nodo);
+    return dato;
+}
+
 bool lista_esta_vacia(lista_t lista) {
     return lista->largo == 0;
 }
@@ -119,6 +125,7 @@ void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *e
 
 lista_iter_t lista_iter_crear(lista_t *lista) {
     lista_iter_t *lista_iter = malloc(sizeof(lista_iter_t));
+    if (!lista_iter) return NULL;
     lista_iter->lista = lista;
     lista_iter->actual = lista->nodo_inicio; 
     return lista_iter; 
@@ -133,21 +140,10 @@ void lista_iter_destruir(lista_iter_t *iter) {
 }
 
 void *lista_iter_borrar(lista_iter_t *iter) {
-    void *dato_borrado = iter->actual->dato;
     nodo_t *nodo_borrado = iter->actual;
-    
-    // Tengo que modificar el anterior al borrado para que apunte al próximo del borrado
-    
-    // Busco al anterior del nodo que quiero borrar
-    while (lista_iter_ver_actual(iter)->prox != nodo_borrado) {
-        lista_iter_avanzar(iter);
-    }
-
-    // Cambio la flecha y destruyo al nodo borrado
-    iter->actual = nodo_borrado->prox;
-    free(nodo_borrado);
-
-    return dato_borrado;
+    iter->actual->anterior->prox = iter->actual->prox;
+    lista_iter_avanzar(iter);
+    return nodo_destruir(nodo_borrado);
 }
 
 bool lista_iter_avanzar(lista_iter_t *iter) {
