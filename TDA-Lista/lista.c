@@ -32,6 +32,8 @@ typedef struct lista_iter {
 lista_t *lista_crear(void) {
     lista_t *lista = calloc(1, sizeof(lista_t));
     lista->largo = 0;
+    lista->nodo_inicio = NULL;
+    lista->nodo_fin = NULL;
     return lista;
 }
 
