@@ -76,12 +76,24 @@ size_t lista_largo(const lista_t *lista);
 
 void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra);
 
+// Crea un iterador externo
+// Pre: la lista fue creada
+// Post: devuelve un iterador apuntando al primer nodo de la lista
 lista_iter_t *lista_iter_crear(lista_t *lista);
 
+// Devuelve el valor del elemento actual
+// Pre: el iterador fue creado
+// Post: se devolvió el elemento al que apunta el iterador si la lista 
+// no está vacía o NULL si lo está
 void *lista_iter_ver_actual(const lista_iter_t *iter);
 
+// Destruye el iterador
+// Pre: el iterador fue creado
 void lista_iter_destruir(lista_iter_t *iter);
 
+// Borra el elemento al que apunta el iterador y devuelve su valor
+// Pre: el iterador fue creado
+// Post: el elemento fue eliminado de la lista y se devolvió su valor
 void *lista_iter_borrar(lista_iter_t *iter);
 
 bool lista_iter_avanzar(lista_iter_t *iter);
