@@ -1,4 +1,5 @@
 #include "lista.h"
+#include "pila.h"
 #include "testing.h"
 #include <stdio.h>
 
@@ -9,9 +10,9 @@ static void prueba_lista_vacia(void) {
     print_test("Crear lista", lista != NULL);
     
     printf("\nCONDICIÓN DE BORDE\n");
-    print_test("La lista está vacía.", lista_esta_vacia(lista));
-    print_test("Borrar un elemento de una lista vacía devuelve NULL.", lista_borrar_primero(lista) == NULL);
-    print_test("Ver el primer elemento de una lista vacía devuelve NULL.", lista_ver_primero(lista) == NULL);
+    print_test("La lista está vacía", lista_esta_vacia(lista));
+    print_test("Borrar un elemento de una lista vacía devuelve NULL", lista_borrar_primero(lista) == NULL);
+    print_test("Ver el primer elemento de una lista vacía devuelve NULL", lista_ver_primero(lista) == NULL);
 
     lista_destruir(lista, NULL);
 }
@@ -79,11 +80,30 @@ static void prueba_insertar_NULL(void) {
     lista_destruir(lista, NULL);
 }
 
+void pila_destruir_wrapper(void* pila) {
+    pila_destruir(pila);
+}
+
+static void prueba_destruccion(void) {
+    printf("\nINICIO DE PRUEBAS DESTRUCCIÓN\n");
+
+    pila_t *pila = pila_crear();
+    lista_t *lista = lista_crear();
+    int valor;
+
+    print_test("Agrego elementos a una pila", pila_apilar(pila, &valor) && pila_apilar(pila, &valor) && pila_apilar(pila, &valor));
+    print_test("Agrego a la lista una pila que tiene elementos", lista_insertar_primero(lista, pila));
+    print_test("El primer elemento es la pila", lista_ver_primero(lista) == pila);
+
+    lista_destruir(lista, pila_destruir_wrapper);
+}
+
 void pruebas_lista_estudiante() {
     prueba_lista_vacia();
     prueba_agregar_elementos();
     prueba_de_volumen();
     prueba_insertar_NULL();
+    prueba_destruccion();
 }
 
 /*
