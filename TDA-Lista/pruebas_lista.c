@@ -98,12 +98,78 @@ static void prueba_destruccion(void) {
     lista_destruir(lista, pila_destruir_wrapper);
 }
 
+static void prueba_remover_al_crear(void) {
+    lista_t *lista = lista_crear();
+    int *numeros = malloc(sizeof(int) * 5);
+
+    for (int i = 0; i < 4; i++) {
+        numeros[i] = i;
+        lista_insertar_primero(lista, &numeros[i]);
+    }
+
+    lista_iter_t *lista_iter = lista_iter_crear(lista);
+    lista_iter_borrar(lista_iter);
+    print_test("el primer elemento de la lista es 2", *(int *)lista_ver_primero(lista) == 2);
+    free(numeros);
+}
+
+static void prueba_remover_ultimo(void) {
+    lista_t *lista = lista_crear();
+    int *numeros = malloc(sizeof(int) * 5);
+
+    for (int i = 0; i < 4; i++) {
+        numeros[i] = i;
+        lista_insertar_primero(lista, &numeros[i]);
+    }
+
+    void *dato = lista_ver_ultimo(lista);
+    lista_iter_t *lista_iter = lista_iter_crear(lista);
+
+    while(!lista_iter_avanzar(lista_iter)) {
+        lista_iter_avanzar(lista_iter);
+    }
+
+    lista_iter_borrar(lista_iter);
+    print_test("el último elemento de la lista cambió", *(int *)lista_ver_ultimo(lista) != *(int*)dato);
+    free(numeros);
+}
+
+static void prueba_remover_del_medio(void) {
+    lista_t *lista = lista_crear();
+    int *numeros = malloc(sizeof(int) * 5);
+
+    for (int i = 0; i < 4; i++) {
+        numeros[i] = i;
+        lista_insertar_primero(lista, &numeros[i]);
+    }
+
+    lista_iter_t *iter_1 = lista_iter_crear(lista);
+
+    for (int i = 0; i < 2; i++) {
+        lista_iter_avanzar(iter_1);
+    }
+
+    void *dato = lista_iter_borrar(iter_1);
+    lista_iter_destruir(iter_1);
+    lista_iter_t *iter_2 = lista_iter_crear(lista);
+
+    for (int i = 0; i < 2; i++) {
+        lista_iter_avanzar(iter_2);
+    }
+
+    print_test("el elemento del medio no está", *(int *)lista_iter_ver_actual(iter_2) != *(int*)dato);
+    free(numeros);
+}
+
 void pruebas_lista_estudiante() {
     prueba_lista_vacia();
     prueba_agregar_elementos();
     prueba_de_volumen();
     prueba_insertar_NULL();
     prueba_destruccion();
+    prueba_remover_al_crear();
+    prueba_remover_ultimo();
+    prueba_remover_del_medio();
 }
 
 /*
