@@ -163,5 +163,6 @@ bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
     iter->anterior->prox = nodo_insertar;
     nodo_insertar->prox = iter->actual;
     iter->actual = nodo_insertar;
+    iter->lista->largo++;
     return true;
 }
