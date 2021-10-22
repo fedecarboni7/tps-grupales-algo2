@@ -147,7 +147,11 @@ void lista_iter_destruir(lista_iter_t *iter) {
 
 void *lista_iter_borrar(lista_iter_t *iter) {
     nodo_t *nodo_borrado = iter->actual;
-    iter->anterior->prox = iter->actual->prox;
+    if (!iter->anterior) {
+        iter->actual = iter->actual->prox; 
+    } else {
+        iter->anterior->prox = iter->actual->prox;
+    }
     lista_iter_avanzar(iter);
     return nodo_destruir(nodo_borrado);
 }
