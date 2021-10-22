@@ -81,7 +81,12 @@ bool lista_insertar_primero(lista_t *lista, void *dato) {
 bool lista_insertar_ultimo(lista_t *lista, void *dato) {
     nodo_t *nodo = nodo_crear(dato);
     if (!nodo) return false;
-    lista->nodo_fin->prox = nodo;
+    if (lista_esta_vacia(lista)) {
+        lista->nodo_inicio = nodo;
+    }
+    else {
+        lista->nodo_fin->prox = nodo;
+    }
     lista->nodo_fin = nodo; 
     lista->largo++;
     return true;
