@@ -102,18 +102,19 @@ static void prueba_remover_al_crear(void) {
     printf("\nINICIO DE PRUEBAS REMOVER ELEMENTO AL CREAR ITERADOR\n");
 
     lista_t *lista = lista_crear();
-    int *numeros = malloc(sizeof(int) * 5);
 
-    for (int i = 0; i < 4; i++) {
-        numeros[i] = i;
-        lista_insertar_primero(lista, &numeros[i]);
-    }
+    int arreglo[] = {2, 5, 6};
 
-    lista_iter_t *lista_iter = lista_iter_crear(lista);
-    lista_iter_borrar(lista_iter);
-    print_test("el primer elemento de la lista es 2", *(int *)lista_ver_primero(lista) == 2);
+    lista_insertar_primero(lista, &arreglo[0]);
+    lista_insertar_primero(lista, &arreglo[1]);
+    lista_insertar_primero(lista, &arreglo[2]);
     
-    free(numeros);
+    lista_iter_t *lista_iter = lista_iter_crear(lista);
+
+    lista_iter_borrar(lista_iter);
+    lista_iter_borrar(lista_iter);
+    print_test("El primer elemento de la lista es 6", lista_ver_primero(lista) == &arreglo[2]);
+    
     lista_iter_destruir(lista_iter);
     lista_destruir(lista, NULL);
 }
