@@ -1,5 +1,4 @@
 #include "lista.h"
-#include <stdlib.h>
 
 // Definición del struct nodo.
 

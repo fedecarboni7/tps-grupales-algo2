@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdlib.h>
 
 /* ******************************************************************
  *                DEFINICION DE LOS TIPOS DE DATOS
