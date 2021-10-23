@@ -181,12 +181,14 @@ static void prueba_insertar_al_principio(void) {
     printf("\nINICIO DE PRUEBAS INSERTAR AL CREAR ITERADOR\n");
 
     lista_t *lista = lista_crear();
-    lista_iter_t *iter = lista_iter_crear(lista);
 
     int arreglo[] = {2, 5, 6};
 
     lista_insertar_primero(lista, &arreglo[0]);
     lista_insertar_primero(lista, &arreglo[1]);
+    
+    lista_iter_t *iter = lista_iter_crear(lista);
+    
     print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
     print_test("El elemento agregado es el primero de la lista", lista_ver_primero(lista) == &arreglo[2]);
 
@@ -198,12 +200,14 @@ static void prueba_insertar_al_final(void) {
     printf("\nINICIO DE PRUEBAS INSERTAR CON ITERADOR AL FINAL\n");
 
     lista_t *lista = lista_crear();
-    lista_iter_t *iter = lista_iter_crear(lista);
 
     int arreglo[] = {2, 5, 6};
 
     lista_insertar_primero(lista, &arreglo[0]);
     lista_insertar_primero(lista, &arreglo[1]);
+    
+    lista_iter_t *iter = lista_iter_crear(lista);
+    
     while (!lista_iter_al_final(iter)) {
         lista_iter_avanzar(iter);
     }
@@ -218,12 +222,13 @@ static void prueba_insertar_en_el_medio(void) {
     printf("\nINICIO DE PRUEBAS INSERTAR EN EL MEDIO\n");
 
     lista_t *lista = lista_crear();
-    lista_iter_t *iter = lista_iter_crear(lista);
 
     int arreglo[] = {2, 5, 6};
 
     lista_insertar_primero(lista, &arreglo[0]);
     lista_insertar_primero(lista, &arreglo[1]);
+    
+    lista_iter_t *iter = lista_iter_crear(lista);
     
     print_test("Avanzo una posición con el iterador", lista_iter_avanzar(iter));
     print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
