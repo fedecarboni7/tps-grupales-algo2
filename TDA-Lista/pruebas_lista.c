@@ -110,7 +110,10 @@ static void prueba_remover_al_crear(void) {
     lista_iter_t *lista_iter = lista_iter_crear(lista);
     lista_iter_borrar(lista_iter);
     print_test("el primer elemento de la lista es 2", *(int *)lista_ver_primero(lista) == 2);
+    
     free(numeros);
+    lista_iter_destruir(lista_iter);
+    lista_destruir(lista, NULL);
 }
 
 static void prueba_remover_ultimo(void) {
@@ -131,7 +134,10 @@ static void prueba_remover_ultimo(void) {
 
     lista_iter_borrar(lista_iter);
     print_test("el último elemento de la lista cambió", *(int *)lista_ver_ultimo(lista) != *(int*)dato);
+    
     free(numeros);
+    lista_iter_destruir(lista_iter);
+    lista_destruir(lista, NULL);
 }
 
 static void prueba_remover_del_medio(void) {
@@ -158,7 +164,12 @@ static void prueba_remover_del_medio(void) {
     }
 
     print_test("el elemento del medio no está", *(int *)lista_iter_ver_actual(iter_2) != *(int*)dato);
+    
     free(numeros);
+    lista_iter_destruir(iter_2);
+    lista_destruir(lista, NULL);
+}
+
 static void prueba_insertar_al_principio(void) {
     lista_t *lista = lista_crear();
     lista_iter_t *iter = lista_iter_crear(lista);
