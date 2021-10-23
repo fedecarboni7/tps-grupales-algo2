@@ -159,6 +159,54 @@ static void prueba_remover_del_medio(void) {
 
     print_test("el elemento del medio no está", *(int *)lista_iter_ver_actual(iter_2) != *(int*)dato);
     free(numeros);
+static void prueba_insertar_al_principio(void) {
+    lista_t *lista = lista_crear();
+    lista_iter_t *iter = lista_iter_crear(lista);
+
+    int arreglo[] = {2, 5, 6};
+
+    lista_insertar_primero(lista, &arreglo[0]);
+    lista_insertar_primero(lista, &arreglo[1]);
+    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("El elemento agregado es el primero de la lista", lista_ver_primero(lista) == &arreglo[2]);
+
+    lista_iter_destruir(iter);
+    lista_destruir(lista, NULL);
+}
+
+static void prueba_insertar_al_final(void) {
+    lista_t *lista = lista_crear();
+    lista_iter_t *iter = lista_iter_crear(lista);
+
+    int arreglo[] = {2, 5, 6};
+
+    lista_insertar_primero(lista, &arreglo[0]);
+    lista_insertar_primero(lista, &arreglo[1]);
+    while (!lista_iter_al_final(iter)) {
+        lista_iter_avanzar(iter);
+    }
+    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2]);
+
+    lista_iter_destruir(iter);
+    lista_destruir(lista, NULL);
+}
+
+static void prueba_insertar_en_el_medio(void) {
+    lista_t *lista = lista_crear();
+    lista_iter_t *iter = lista_iter_crear(lista);
+
+    int arreglo[] = {2, 5, 6};
+
+    lista_insertar_primero(lista, &arreglo[0]);
+    lista_insertar_primero(lista, &arreglo[1]);
+    
+    print_test("Avanzo una posición con el iterador", lista_iter_avanzar(iter));
+    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("El elemento agregado está a la mitad de la lista", lista_ver_primero(lista) == &arreglo[0] && lista_ver_ultimo(lista) == &arreglo[1]);
+
+    lista_iter_destruir(iter);
+    lista_destruir(lista, NULL);
 }
 
 void pruebas_lista_estudiante() {
@@ -170,6 +218,9 @@ void pruebas_lista_estudiante() {
     prueba_remover_al_crear();
     prueba_remover_ultimo();
     prueba_remover_del_medio();
+    prueba_insertar_al_principio();
+    prueba_insertar_al_final();
+    prueba_insertar_en_el_medio();
 }
 
 /*
