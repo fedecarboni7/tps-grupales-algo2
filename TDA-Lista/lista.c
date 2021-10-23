@@ -132,7 +132,7 @@ lista_iter_t *lista_iter_crear(lista_t *lista) {
     if (!lista_iter) return NULL;
     lista_iter->lista = lista;
     lista_iter->actual = lista->nodo_inicio;
-    lista_iter->anterior->prox = lista_iter->actual;
+    lista_iter->anterior = NULL;
     return lista_iter; 
 }
 
@@ -162,7 +162,7 @@ bool lista_iter_avanzar(lista_iter_t *iter) {
 }
 
 bool lista_iter_al_final(const lista_iter_t *iter) {
-    return iter->actual == iter->lista->nodo_fin;
+    return iter->actual == iter->lista->nodo_fin->prox;
 }
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
