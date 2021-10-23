@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 static void prueba_lista_vacia(void) {
-    printf("INICIO DE PRUEBAS CON LISTA VACIA\n");
+    printf("\nINICIO DE PRUEBAS CON LISTA VACIA\n");
 
     lista_t *lista = lista_crear();
     print_test("Crear lista", lista != NULL);
@@ -99,6 +99,8 @@ static void prueba_destruccion(void) {
 }
 
 static void prueba_remover_al_crear(void) {
+    printf("\nINICIO DE PRUEBAS REMOVER ELEMENTO AL CREAR ITERADOR\n");
+
     lista_t *lista = lista_crear();
     int *numeros = malloc(sizeof(int) * 5);
 
@@ -117,6 +119,8 @@ static void prueba_remover_al_crear(void) {
 }
 
 static void prueba_remover_ultimo(void) {
+    printf("\nINICIO DE PRUEBAS REMOVER ÚLTIMO ELEMENTO\n");
+
     lista_t *lista = lista_crear();
     int *numeros = malloc(sizeof(int) * 5);
 
@@ -141,6 +145,8 @@ static void prueba_remover_ultimo(void) {
 }
 
 static void prueba_remover_del_medio(void) {
+    printf("\nINICIO DE PRUEBAS REMOVER ELEMENTO DEL MEDIO\n");
+
     lista_t *lista = lista_crear();
     int *numeros = malloc(sizeof(int) * 5);
 
@@ -171,6 +177,8 @@ static void prueba_remover_del_medio(void) {
 }
 
 static void prueba_insertar_al_principio(void) {
+    printf("\nINICIO DE PRUEBAS INSERTAR AL CREAR ITERADOR\n");
+
     lista_t *lista = lista_crear();
     lista_iter_t *iter = lista_iter_crear(lista);
 
@@ -186,6 +194,8 @@ static void prueba_insertar_al_principio(void) {
 }
 
 static void prueba_insertar_al_final(void) {
+    printf("\nINICIO DE PRUEBAS INSERTAR CON ITERADOR AL FINAL\n");
+
     lista_t *lista = lista_crear();
     lista_iter_t *iter = lista_iter_crear(lista);
 
@@ -204,6 +214,8 @@ static void prueba_insertar_al_final(void) {
 }
 
 static void prueba_insertar_en_el_medio(void) {
+    printf("\nINICIO DE PRUEBAS INSERTAR EN EL MEDIO\n");
+
     lista_t *lista = lista_crear();
     lista_iter_t *iter = lista_iter_crear(lista);
 
@@ -221,11 +233,13 @@ static void prueba_insertar_en_el_medio(void) {
 }
 
 void pruebas_lista_estudiante() {
+    printf("INICIO PRUEBAS CASOS BÁSICOS LISTA\n");
     prueba_lista_vacia();
     prueba_agregar_elementos();
     prueba_de_volumen();
     prueba_insertar_NULL();
     prueba_destruccion();
+    printf("\nINICIO PRUEBAS CASOS ITERADOR EXTERNO\n");
     prueba_remover_al_crear();
     prueba_remover_ultimo();
     prueba_remover_del_medio();
