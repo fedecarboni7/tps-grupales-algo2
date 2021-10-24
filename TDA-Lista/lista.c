@@ -124,7 +124,13 @@ size_t lista_largo(const lista_t *lista) {
  * *****************************************************************/
 
 void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra){
-    
+    nodo_t *actual = lista->nodo_inicio;
+    if (actual != NULL) {
+        if (!visitar(actual->dato, extra)) {
+            return; 
+        }
+        actual = actual->prox; 
+    }
 }
 
 lista_iter_t *lista_iter_crear(lista_t *lista) {
@@ -145,18 +151,15 @@ void lista_iter_destruir(lista_iter_t *iter) {
 }
 
 void *lista_iter_borrar(lista_iter_t *iter) {
-    nodo_t *nodo_borrado = nodo_crear(iter->actual->dato);
-    if (iter->anterior && !iter->actual->prox) {
-        iter->anterior->prox = NULL;
-        return nodo_destruir(nodo_borrado);
+    nodo_t *nodo_borrado = NULL;
+    void* dato = NULL;
+    if (!lista_iter_al_final(iter)) {
+        nodo_borrado = iter->actual;
+        dato = nodo_borrado->dato;
+        iter->actual = iter->actual->prox;
+        nodo_destruir(nodo_borrado);
     }
-    if (!iter->anterior) {
-        iter->actual = iter->actual->prox; 
-    } else {
-        iter->anterior->prox = iter->actual->prox;
-    }
-    lista_iter_avanzar(iter);
-    return nodo_destruir(nodo_borrado);
+    return dato;
 }
 
 bool lista_iter_avanzar(lista_iter_t *iter) {
