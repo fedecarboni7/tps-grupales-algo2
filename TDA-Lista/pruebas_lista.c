@@ -3,6 +3,16 @@
 #include "testing.h"
 #include <stdio.h>
 
+bool imprimir(void* dato, void* extra) {
+    printf("%d", *(int*) dato);
+    return true;
+}
+
+bool sumar(void* dato, void* extra) {
+    *(int*) extra += *(int*) dato;
+    return true;  
+}
+
 static void prueba_lista_vacia(void) {
     printf("\nINICIO DE PRUEBAS CON LISTA VACIA\n");
 
@@ -106,14 +116,13 @@ static void prueba_remover_al_crear(void) {
     int arreglo[] = {2, 5, 6};
 
     lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_primero(lista, &arreglo[1]);
-    lista_insertar_primero(lista, &arreglo[2]);
+    lista_insertar_ultimo(lista, &arreglo[1]);
+    lista_insertar_ultimo(lista, &arreglo[2]);
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
-    lista_iter_borrar(lista_iter);
-    lista_iter_borrar(lista_iter);
-    print_test("El primer elemento de la lista es 6", lista_ver_primero(lista) == &arreglo[2]);
+    printf("%d", *(int*)lista_iter_borrar(lista_iter));
+    print_test("El primer elemento de la lista es 5", lista_ver_primero(lista) == &arreglo[0]);
     
     lista_iter_destruir(lista_iter);
     lista_destruir(lista, NULL);
@@ -232,6 +241,33 @@ static void prueba_insertar_en_el_medio(void) {
     lista_destruir(lista, NULL);
 }
 
+static void prueba_imprimir_elementos(void) {
+    printf("\nINICIO DE PRUEBAS IMPRIMIR ELEMENTOS\n");
+    int arreglo[5] = {1, 2, 3, 4, 5};
+    lista_t *lista = lista_crear();
+
+    for (int i = 0; i < 5; i++) {
+        lista_insertar_ultimo(lista, (void*) &arreglo[i]); 
+    }
+
+    lista_iterar(lista, imprimir, NULL); 
+    lista_destruir(lista, NULL);
+}
+
+static void prueba_sumar_elementos(void) {
+    printf("\nINICIO DE PRUEBAS SUMAR ELEMENTOS\n");
+    int arreglo[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    lista_t *lista = lista_crear();
+
+    for (int i = 0; i < 10; i++) {
+        lista_insertar_ultimo(lista, &arreglo[i]);
+    }
+
+    int suma = 0;
+    lista_iterar(lista, sumar, &suma);
+    print_test("La suma de todos los elementos de la lista es 55", suma == 55);
+}
+
 void pruebas_lista_estudiante() {
     printf("INICIO PRUEBAS CASOS BÁSICOS LISTA\n");
     prueba_lista_vacia();
@@ -239,6 +275,9 @@ void pruebas_lista_estudiante() {
     prueba_de_volumen();
     prueba_insertar_NULL();
     prueba_destruccion();
+    printf("\nINICIO PRUEBAS CASOS ITERADOR INTERNO\n");
+    prueba_imprimir_elementos();
+    prueba_sumar_elementos();
     printf("\nINICIO PRUEBAS CASOS ITERADOR EXTERNO\n");
     prueba_remover_al_crear();
     prueba_remover_ultimo();
