@@ -151,19 +151,26 @@ void lista_iter_destruir(lista_iter_t *iter) {
 }
 
 void *lista_iter_borrar(lista_iter_t *iter) {
-    nodo_t *nodo_borrado = NULL;
-    void* dato = NULL;
-    if (!lista_iter_al_final(iter)) {
-        nodo_borrado = iter->actual;
-        dato = nodo_borrado->dato;
-        iter->actual = iter->actual->prox;
-        nodo_destruir(nodo_borrado);
+    if (lista_esta_vacia(iter->lista)) return NULL;
+    if (lista_iter_al_final(iter)) return NULL;
+    if (iter->actual->dato == lista_ver_primero(iter->lista)) {
+        lista_iter_avanzar(iter);
+        return lista_borrar_primero(iter->lista);
     }
-    return dato;
+    else {
+        nodo_t* nodo_aux = iter->actual;
+        void* dato_anterior = iter->actual->dato;
+        iter->anterior->prox = iter->actual->prox;
+        free(nodo_aux);
+        iter->actual = iter->anterior->prox;
+        iter->lista->largo--;
+        return dato_anterior;
+    }
 }
 
 bool lista_iter_avanzar(lista_iter_t *iter) {
     if (lista_iter_al_final(iter)) return false;
+    iter->anterior = iter->actual;
     iter->actual = iter->actual->prox;
     return true;
 }
