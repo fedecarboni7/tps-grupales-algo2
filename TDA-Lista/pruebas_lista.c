@@ -121,9 +121,9 @@ static void prueba_remover_al_crear(void) {
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
-    printf("%d", *(int*)lista_iter_borrar(lista_iter));
-    print_test("El primer elemento de la lista es 5", lista_ver_primero(lista) == &arreglo[0]);
-    
+    print_test("Remuevo el primer elemento", lista_iter_borrar(lista_iter) == &arreglo[0]);
+    print_test("El primer elemento de la lista es 5", lista_ver_primero(lista) == &arreglo[1]);
+
     lista_iter_destruir(lista_iter);
     lista_destruir(lista, NULL);
 }
@@ -135,19 +135,17 @@ static void prueba_remover_ultimo(void) {
     
     int arreglo[] = {1, 3, 5};
 
-    lista_insertar_primero(lista, &arreglo[0]);
     lista_insertar_primero(lista, &arreglo[1]);
     lista_insertar_primero(lista, &arreglo[2]);
+    lista_insertar_ultimo(lista, &arreglo[0]);
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
-    lista_iter_avanzar(lista_iter);
-    lista_iter_avanzar(lista_iter);
-
-    print_test("el último elemento de la lista es 1", *(int *)lista_ver_ultimo(lista) == 1);
-
-    lista_iter_borrar(lista_iter);
-    print_test("el último elemento de la lista es 3", *(int *)lista_ver_ultimo(lista) == 3);
+    
+    print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(lista_iter) && lista_iter_avanzar(lista_iter) && lista_iter_ver_actual(lista_iter) == &arreglo[0]);
+    print_test("El último elemento de la lista es 1", lista_ver_ultimo(lista) == &arreglo[0]);
+    print_test("Borro el último elemento", lista_iter_borrar(lista_iter) == &arreglo[0]);
+    print_test("El último elemento de la lista es 3", lista_ver_ultimo(lista) == &arreglo[1]);
 
     lista_iter_destruir(lista_iter);
     lista_destruir(lista, NULL);

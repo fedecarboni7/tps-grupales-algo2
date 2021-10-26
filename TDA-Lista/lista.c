@@ -143,7 +143,7 @@ lista_iter_t *lista_iter_crear(lista_t *lista) {
 }
 
 void *lista_iter_ver_actual(const lista_iter_t *iter) {
-    return lista_esta_vacia(iter->lista) ? iter->actual->dato : NULL;
+    return !lista_esta_vacia(iter->lista) ? iter->actual->dato : NULL;
 }
 
 void lista_iter_destruir(lista_iter_t *iter) {
@@ -153,15 +153,14 @@ void lista_iter_destruir(lista_iter_t *iter) {
 void *lista_iter_borrar(lista_iter_t *iter) {
     if (lista_esta_vacia(iter->lista)) return NULL;
     if (lista_iter_al_final(iter)) return NULL;
-    if (iter->actual->dato == lista_ver_primero(iter->lista)) {
+    if (iter->actual == iter->lista->nodo_inicio) {
         lista_iter_avanzar(iter);
         return lista_borrar_primero(iter->lista);
     }
     else {
-        nodo_t* nodo_aux = iter->actual;
         void* dato_anterior = iter->actual->dato;
         iter->anterior->prox = iter->actual->prox;
-        free(nodo_aux);
+        free(iter->actual);
         iter->actual = iter->anterior->prox;
         iter->lista->largo--;
         return dato_anterior;
