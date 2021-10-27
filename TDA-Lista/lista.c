@@ -187,8 +187,16 @@ bool lista_iter_al_final(const lista_iter_t *iter) {
 }
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
-    if (iter->actual == iter->lista->nodo_inicio) return lista_insertar_primero(iter->lista, dato);
-    if (iter->actual == iter->lista->nodo_fin) return lista_insertar_ultimo(iter->lista, dato);
+    if (iter->actual == iter->lista->nodo_inicio) {
+        lista_insertar_primero(iter->lista, dato);
+        iter->actual = iter->lista->nodo_inicio;
+        return true;
+    }
+    if (iter->actual == iter->lista->nodo_fin) {
+        lista_insertar_ultimo(iter->lista, dato);
+        iter->actual = iter->lista->nodo_fin;
+        return true;
+    }
     nodo_t* nodo_insertar = nodo_crear(dato);
     if (!nodo_insertar) return false;
     nodo_insertar->prox = iter->actual;
