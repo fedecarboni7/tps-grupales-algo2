@@ -112,6 +112,10 @@ static void prueba_destruccion(void) {
     lista_destruir(lista, pila_destruir_wrapper);
 }
 
+/* ******************************************************************
+ *                        PRUEBAS ITERADOR EXTERNO
+ * *****************************************************************/
+
 static void prueba_remover_al_crear(void) {
     printf("\nINICIO DE PRUEBAS REMOVER ELEMENTO AL CREAR ITERADOR\n");
 
@@ -213,10 +217,8 @@ static void prueba_insertar_al_final(void) {
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    while (!lista_iter_al_final(iter)) {
-        lista_iter_avanzar(iter);
-    }
-    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[0]);
+    print_test("Inserto un elemento a al final de la lista", lista_iter_insertar(iter, &arreglo[2]));
     print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2]);
 
     lista_iter_destruir(iter);
@@ -228,18 +230,27 @@ static void prueba_insertar_en_el_medio(void) {
 
     lista_t *lista = lista_crear();
 
-    int arreglo[] = {2, 5, 6};
+    int arreglo[] = {0, 2, 5, 6, 7};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_primero(lista, &arreglo[1]);
+    lista_insertar_ultimo(lista, &arreglo[0]);
+    lista_insertar_ultimo(lista, &arreglo[1]);
+    lista_insertar_ultimo(lista, &arreglo[3]);
+    lista_insertar_ultimo(lista, &arreglo[4]);
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    print_test("Avanzo una posición con el iterador", lista_iter_avanzar(iter));
-    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
-    print_test("El elemento agregado está a la mitad de la lista", lista_ver_primero(lista) == &arreglo[0] && lista_ver_ultimo(lista) == &arreglo[1]);
+    print_test("Me posiciono en el medio de la lista", lista_iter_avanzar(iter) && lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[3]);
+    print_test("Inserto un elemento en el medio de la lista", lista_iter_insertar(iter, &arreglo[2]));
 
     lista_iter_destruir(iter);
+
+    lista_iter_t* iter2 = lista_iter_crear(lista);
+
+    lista_iter_avanzar(iter2);
+    lista_iter_avanzar(iter2);
+    print_test("El elemento agregado está a la mitad de la lista", lista_iter_ver_actual(iter2) == &arreglo[2]);
+
+    lista_iter_destruir(iter2);
     lista_destruir(lista, NULL);
 }
 
@@ -251,7 +262,7 @@ static void prueba_imprimir_con_corte(void) {
     for (int i = 0; i < 10; i++) {
         lista_insertar_ultimo(lista, (void*) &arreglo[i]); 
     }
-    
+
     int extra = 0;
     lista_iterar(lista, imprimir, &extra); 
     lista_destruir(lista, NULL);
