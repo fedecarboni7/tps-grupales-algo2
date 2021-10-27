@@ -4,6 +4,10 @@
 #include <stdio.h>
 
 bool imprimir(void* dato, void* extra) {
+    if (*(int*) extra == 5) {
+        return false;
+    }
+    (*(int*) extra)++;
     printf("%d", *(int*) dato);
     return true;
 }
@@ -239,26 +243,27 @@ static void prueba_insertar_en_el_medio(void) {
     lista_destruir(lista, NULL);
 }
 
-static void prueba_imprimir_elementos(void) {
+static void prueba_imprimir_con_corte(void) {
     printf("\nINICIO DE PRUEBAS IMPRIMIR ELEMENTOS\n");
-    int arreglo[5] = {1, 2, 3, 4, 5};
+    int arreglo[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     lista_t *lista = lista_crear();
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
         lista_insertar_ultimo(lista, (void*) &arreglo[i]); 
     }
-
-    lista_iterar(lista, imprimir, NULL); 
+    
+    int extra = 0;
+    lista_iterar(lista, imprimir, &extra); 
     lista_destruir(lista, NULL);
 }
 
-static void prueba_sumar_elementos(void) {
+static void prueba_sumar_sin_corte(void) {
     printf("\nINICIO DE PRUEBAS SUMAR ELEMENTOS\n");
     int arreglo[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     lista_t *lista = lista_crear();
 
     for (int i = 0; i < 10; i++) {
-        lista_insertar_ultimo(lista, &arreglo[i]);
+        lista_insertar_ultimo(lista, (void*) &arreglo[i]);
     }
 
     int suma = 0;
@@ -274,8 +279,8 @@ void pruebas_lista_estudiante() {
     prueba_insertar_NULL();
     prueba_destruccion();
     printf("\nINICIO PRUEBAS CASOS ITERADOR INTERNO\n");
-    prueba_imprimir_elementos();
-    prueba_sumar_elementos();
+    prueba_imprimir_con_corte();
+    prueba_sumar_sin_corte();
     printf("\nINICIO PRUEBAS CASOS ITERADOR EXTERNO\n");
     prueba_remover_al_crear();
     prueba_remover_ultimo();
