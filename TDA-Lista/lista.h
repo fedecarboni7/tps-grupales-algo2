@@ -75,6 +75,9 @@ size_t lista_largo(const lista_t *lista);
  *                    PRIMITIVAS DEL ITERADOR
  * *****************************************************************/
 
+// Iterador interno. Recorre la lista e invoca la funcion con cada elemento de
+// la misma. Dicha función puede devolver true si se deben seguir recorriendo
+// elementos o false si se debe dejar de iterar elementos.
 void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra);
 
 // Crea un iterador externo.
