@@ -264,7 +264,7 @@ static void prueba_sumar_elementos(void) {
     lista_iterar(lista, sumar, &suma);
     print_test("La suma de todos los elementos de la lista es 55", suma == 55);
 }
-*/
+
 void pruebas_lista_estudiante() {
     printf("INICIO PRUEBAS CASOS BÁSICOS LISTA\n");
     prueba_lista_vacia();
