@@ -280,6 +280,7 @@ static void prueba_sumar_sin_corte(void) {
     int suma = 0;
     lista_iterar(lista, sumar, &suma);
     print_test("La suma de todos los elementos de la lista es 55", suma == 55);
+    lista_destruir(lista, NULL);
 }
 
 void pruebas_lista_estudiante() {
