@@ -108,6 +108,10 @@ static void prueba_destruccion(void) {
     lista_destruir(lista, pila_destruir_wrapper);
 }
 
+/* ******************************************************************
+ *                        PRUEBAS ITERADOR EXTERNO
+ * *****************************************************************/
+
 static void prueba_remover_al_crear(void) {
     printf("\nINICIO DE PRUEBAS REMOVER ELEMENTO AL CREAR ITERADOR\n");
 
@@ -222,21 +226,33 @@ static void prueba_insertar_en_el_medio(void) {
 
     lista_t *lista = lista_crear();
 
-    int arreglo[] = {0, 2, 5, 6};
+    int arreglo[] = {0, 2, 5, 6, 7};
 
     lista_insertar_ultimo(lista, &arreglo[0]);
     lista_insertar_ultimo(lista, &arreglo[1]);
     lista_insertar_ultimo(lista, &arreglo[3]);
+    lista_insertar_ultimo(lista, &arreglo[4]);
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    print_test("Avanzo una posición con el iterador", lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[1]);
+    print_test("Me posiciono en el medio de la lista", lista_iter_avanzar(iter) && lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[3]);
     print_test("Inserto un elemento en el medio de la lista", lista_iter_insertar(iter, &arreglo[2]));
-    print_test("El elemento agregado está a la mitad de la lista", lista_ver_primero(lista) == &arreglo[0] && lista_ver_ultimo(lista) == &arreglo[3]);
 
     lista_iter_destruir(iter);
+
+    lista_iter_t* iter2 = lista_iter_crear(lista);
+
+    lista_iter_avanzar(iter2);
+    lista_iter_avanzar(iter2);
+    print_test("El elemento agregado está a la mitad de la lista", lista_iter_ver_actual(iter2) == &arreglo[2]);
+
+    lista_iter_destruir(iter2);
     lista_destruir(lista, NULL);
 }
+
+/* ******************************************************************
+ *                        PRUEBAS ITERADOR INTERNO
+ * *****************************************************************/
 
 static void prueba_imprimir_elementos(void) {
     printf("\nINICIO DE PRUEBAS IMPRIMIR ELEMENTOS\n");
