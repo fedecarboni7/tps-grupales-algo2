@@ -16,6 +16,19 @@ typedef struct campo {
     void* dato;
 } campo_t;
 
+// Definición de la función de hashing elegida: DJB2
+// Fuente: https://softwareengineering.stackexchange.com/a/49566
+
+unsigned long hash(unsigned char *str) {
+    unsigned long hash = 5381;
+    int c;
+
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c;
+
+    return hash;
+}
+
 size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
     for(size_t i = 0; i < hash->m; i++) {
