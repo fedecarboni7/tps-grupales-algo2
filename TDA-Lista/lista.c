@@ -125,7 +125,7 @@ size_t lista_largo(const lista_t *lista) {
 
 void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra){
     nodo_t *actual = lista->nodo_inicio;
-    if (actual != NULL) {
+    while (actual != NULL) {
         if (!visitar(actual->dato, extra)) {
             return; 
         }
@@ -156,8 +156,14 @@ void *lista_iter_borrar(lista_iter_t *iter) {
     if (iter->actual == iter->lista->nodo_inicio) {
         lista_iter_avanzar(iter);
         return lista_borrar_primero(iter->lista);
-    }
-    else {
+    } else if (iter->actual == iter->lista->nodo_fin) {
+        void* dato_anterior = iter->actual->dato;
+        iter->lista->nodo_fin = iter->anterior;
+        free(iter->actual);
+        iter->actual = NULL;
+        iter->lista->largo--;
+        return dato_anterior;
+    } else {
         void* dato_anterior = iter->actual->dato;
         iter->anterior->prox = iter->actual->prox;
         free(iter->actual);
