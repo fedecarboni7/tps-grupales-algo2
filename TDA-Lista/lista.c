@@ -143,7 +143,7 @@ lista_iter_t *lista_iter_crear(lista_t *lista) {
 }
 
 void *lista_iter_ver_actual(const lista_iter_t *iter) {
-    if (lista_esta_vacia(iter->lista) || lista_iter_al_final(iter)) return NULL;
+    if (lista_iter_al_final(iter)) return NULL;
     else return iter->actual->dato;
 }
 
@@ -175,14 +175,14 @@ void *lista_iter_borrar(lista_iter_t *iter) {
 }
 
 bool lista_iter_avanzar(lista_iter_t *iter) {
-    if (lista_iter_al_final(iter) || lista_esta_vacia(iter->lista)) return false;
+    if (lista_iter_al_final(iter)) return false;
     iter->anterior = iter->actual;
     iter->actual = iter->actual->prox;
     return true;
 }
 
 bool lista_iter_al_final(const lista_iter_t *iter) {
-    if (lista_esta_vacia(iter->lista)) return false;
+    if (lista_esta_vacia(iter->lista)) return true;
     else return iter->actual == iter->lista->nodo_fin->prox;
 }
 
