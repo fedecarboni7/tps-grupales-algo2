@@ -1,4 +1,5 @@
 #include "lista.h"
+#include <stdlib.h>
 
 // Definición del struct nodo.
 
@@ -181,7 +182,8 @@ bool lista_iter_avanzar(lista_iter_t *iter) {
 }
 
 bool lista_iter_al_final(const lista_iter_t *iter) {
-    return iter->actual == iter->lista->nodo_fin->prox;
+    if (lista_esta_vacia(iter->lista)) return NULL;
+    else return iter->actual == iter->lista->nodo_fin->prox;
 }
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
