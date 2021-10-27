@@ -67,13 +67,12 @@ bool lista_insertar_primero(lista_t *lista, void *dato) {
     nodo_t* nodo = nodo_crear(dato);
     if (!nodo) return false;
     if (lista_esta_vacia(lista)) {
-        lista->nodo_inicio = nodo;
         lista->nodo_fin = nodo;
     }
     else {
         nodo->prox = lista->nodo_inicio;
-        lista->nodo_inicio = nodo;
     }
+    lista->nodo_inicio = nodo;
     lista->largo++;
     return true;
 }
