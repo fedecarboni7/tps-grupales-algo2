@@ -46,6 +46,7 @@ static void prueba_agregar_elementos(void) {
     print_test("El elemento agregado es el último", lista_ver_ultimo(lista) == &arreglo[2]);
     print_test("Agregar un cuarto elemento al final", lista_insertar_ultimo(lista, &arreglo[3]));
     print_test("El elemento agregado es el último", lista_ver_ultimo(lista) == &arreglo[3]);
+    print_test("El largo de la lista es igual a 4", lista_largo(lista) == 4);
     print_test("Borro el primer elemento", lista_borrar_primero(lista) == &arreglo[1]);
     print_test("Borro el segundo elemento", lista_borrar_primero(lista) == &arreglo[0]);
     print_test("Borro el tercer elemento", lista_borrar_primero(lista) == &arreglo[2]);
@@ -219,10 +220,9 @@ static void prueba_insertar_al_final(void) {
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[0]);
-    print_test("Inserto un elemento a al final de la lista", lista_iter_insertar(iter, &arreglo[2]));
-    print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2]);
-    print_test("Avanzo el iterador al final de la lista", lista_iter_avanzar(iter) && lista_iter_al_final(iter));
+    print_test("Me posiciono al final de la lista", lista_iter_avanzar(iter) && lista_iter_avanzar(iter) && lista_iter_al_final(iter));
+    print_test("Inserto un elemento al final de la lista", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2] && lista_iter_ver_actual(iter) == &arreglo[2]);
 
     lista_iter_destruir(iter);
     lista_destruir(lista, NULL);

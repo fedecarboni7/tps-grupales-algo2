@@ -192,7 +192,7 @@ bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
         iter->actual = iter->lista->nodo_inicio;
         return true;
     }
-    if (iter->actual == iter->lista->nodo_fin) {
+    if (lista_iter_al_final(iter)) {
         lista_insertar_ultimo(iter->lista, dato);
         iter->actual = iter->lista->nodo_fin;
         return true;
