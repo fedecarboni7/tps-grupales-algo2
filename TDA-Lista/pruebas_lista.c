@@ -209,10 +209,8 @@ static void prueba_insertar_al_final(void) {
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    while (!lista_iter_al_final(iter)) {
-        lista_iter_avanzar(iter);
-    }
-    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[0]);
+    print_test("Inserto un elemento a al final de la lista", lista_iter_insertar(iter, &arreglo[2]));
     print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2]);
 
     lista_iter_destruir(iter);
@@ -224,16 +222,17 @@ static void prueba_insertar_en_el_medio(void) {
 
     lista_t *lista = lista_crear();
 
-    int arreglo[] = {2, 5, 6};
+    int arreglo[] = {0, 2, 5, 6};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_primero(lista, &arreglo[1]);
+    lista_insertar_ultimo(lista, &arreglo[0]);
+    lista_insertar_ultimo(lista, &arreglo[1]);
+    lista_insertar_ultimo(lista, &arreglo[3]);
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    print_test("Avanzo una posición con el iterador", lista_iter_avanzar(iter));
-    print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
-    print_test("El elemento agregado está a la mitad de la lista", lista_ver_primero(lista) == &arreglo[0] && lista_ver_ultimo(lista) == &arreglo[1]);
+    print_test("Avanzo una posición con el iterador", lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[1]);
+    print_test("Inserto un elemento en el medio de la lista", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("El elemento agregado está a la mitad de la lista", lista_ver_primero(lista) == &arreglo[0] && lista_ver_ultimo(lista) == &arreglo[3]);
 
     lista_iter_destruir(iter);
     lista_destruir(lista, NULL);
@@ -265,7 +264,7 @@ static void prueba_sumar_elementos(void) {
     lista_iterar(lista, sumar, &suma);
     print_test("La suma de todos los elementos de la lista es 55", suma == 55);
 }
-
+*/
 void pruebas_lista_estudiante() {
     printf("INICIO PRUEBAS CASOS BÁSICOS LISTA\n");
     prueba_lista_vacia();
