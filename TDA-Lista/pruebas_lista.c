@@ -27,6 +27,7 @@ static void prueba_lista_vacia(void) {
     print_test("La lista está vacía", lista_esta_vacia(lista));
     print_test("Borrar un elemento de una lista vacía devuelve NULL", lista_borrar_primero(lista) == NULL);
     print_test("Ver el primer elemento de una lista vacía devuelve NULL", lista_ver_primero(lista) == NULL);
+    print_test("Ver el último elemento de una lista vacía devuelve NULL", lista_ver_ultimo(lista) == NULL);
 
     lista_destruir(lista, NULL);
 }
@@ -199,6 +200,7 @@ static void prueba_insertar_al_principio(void) {
     lista_iter_t *iter = lista_iter_crear(lista);
     
     print_test("Inserto con el iterador un elemento a una lista con elementos", lista_iter_insertar(iter, &arreglo[2]));
+    print_test("Ver actual con el iterador luego de insertar", lista_iter_ver_actual(iter) == &arreglo[2]);
     print_test("El elemento agregado es el primero de la lista", lista_ver_primero(lista) == &arreglo[2]);
 
     lista_iter_destruir(iter);
@@ -220,6 +222,7 @@ static void prueba_insertar_al_final(void) {
     print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[0]);
     print_test("Inserto un elemento a al final de la lista", lista_iter_insertar(iter, &arreglo[2]));
     print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2]);
+    print_test("Avanzo el iterador al final de la lista", lista_iter_avanzar(iter) && lista_iter_al_final(iter));
 
     lista_iter_destruir(iter);
     lista_destruir(lista, NULL);
@@ -283,6 +286,21 @@ static void prueba_sumar_sin_corte(void) {
     lista_destruir(lista, NULL);
 }
 
+static void pruebas_borde_iter_externo(void) {
+    printf("\nINICIO DE PRUEBAS BORDE ITERADOR EXTERNO\n");
+
+    lista_t *lista = lista_crear();
+    lista_iter_t *iter = lista_iter_crear(lista);
+
+    print_test("Ver el actual de una lista vacía devuelve NULL", lista_iter_ver_actual(iter) == NULL);
+    print_test("El iterador está al final cuando la lista está vacía", lista_iter_al_final(iter));
+    print_test("El iterador no puede borrar cuando la lista está vacía", lista_iter_borrar(iter) == NULL);
+    print_test("El iterador no puede avanzar cuando la lista está vacía", !lista_iter_avanzar(iter));
+
+    lista_iter_destruir(iter);
+    lista_destruir(lista, NULL);
+}
+
 void pruebas_lista_estudiante() {
     printf("INICIO PRUEBAS CASOS BÁSICOS LISTA\n");
     prueba_lista_vacia();
@@ -300,6 +318,7 @@ void pruebas_lista_estudiante() {
     prueba_insertar_al_principio();
     prueba_insertar_al_final();
     prueba_insertar_en_el_medio();
+    pruebas_borde_iter_externo();
 }
 
 /*
