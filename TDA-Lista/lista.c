@@ -144,7 +144,8 @@ lista_iter_t *lista_iter_crear(lista_t *lista) {
 }
 
 void *lista_iter_ver_actual(const lista_iter_t *iter) {
-    return !lista_esta_vacia(iter->lista) ? iter->actual->dato : NULL;
+    if (lista_esta_vacia(iter->lista) || lista_iter_al_final(iter)) return NULL;
+    else return iter->actual->dato;
 }
 
 void lista_iter_destruir(lista_iter_t *iter) {
