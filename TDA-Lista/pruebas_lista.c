@@ -143,19 +143,20 @@ static void prueba_remover_ultimo(void) {
 
     lista_t *lista = lista_crear();
     
-    int arreglo[] = {1, 3, 5};
+    int arreglo[] = {1, 2};
 
-    lista_insertar_primero(lista, &arreglo[1]);
-    lista_insertar_primero(lista, &arreglo[2]);
-    lista_insertar_ultimo(lista, &arreglo[0]);
+    lista_insertar_primero(lista, &arreglo[0]);
+    lista_insertar_ultimo(lista, &arreglo[1]);
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
     
-    print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(lista_iter) && lista_iter_avanzar(lista_iter) && lista_iter_ver_actual(lista_iter) == &arreglo[0]);
+    print_test("Me posiciono en el último elemento de la lista", lista_iter_avanzar(lista_iter) && lista_iter_ver_actual(lista_iter) == &arreglo[1]);
+    print_test("El último elemento de la lista es 2", lista_ver_ultimo(lista) == &arreglo[1]);
+    print_test("Borro el último elemento", lista_iter_borrar(lista_iter) == &arreglo[1]);
     print_test("El último elemento de la lista es 1", lista_ver_ultimo(lista) == &arreglo[0]);
-    print_test("Borro el último elemento", lista_iter_borrar(lista_iter) == &arreglo[0]);
-    print_test("El último elemento de la lista es 3", lista_ver_ultimo(lista) == &arreglo[1]);
+    print_test("El largo de la lista es igual a 1", lista_largo(lista) == 1);
+    print_test("Ver actual es igual a NULL", lista_iter_ver_actual(lista_iter) == NULL);
 
     lista_iter_destruir(lista_iter);
     lista_destruir(lista, NULL);
@@ -221,6 +222,8 @@ static void prueba_insertar_al_final(void) {
     lista_iter_t *iter = lista_iter_crear(lista);
     
     print_test("Me posiciono al final de la lista", lista_iter_avanzar(iter) && lista_iter_avanzar(iter) && lista_iter_al_final(iter));
+    print_test("Ver actual devuelve NULL", lista_iter_ver_actual(iter) == NULL);
+    print_test("Avanzar devuelve false", !lista_iter_avanzar(iter));
     print_test("Inserto un elemento al final de la lista", lista_iter_insertar(iter, &arreglo[2]));
     print_test("El elemento agregado es el último de la lista", lista_ver_ultimo(lista) == &arreglo[2] && lista_iter_ver_actual(iter) == &arreglo[2]);
 

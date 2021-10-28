@@ -158,10 +158,11 @@ void *lista_iter_borrar(lista_iter_t *iter) {
         lista_iter_avanzar(iter);
         return lista_borrar_primero(iter->lista);
     } else if (iter->actual == iter->lista->nodo_fin) {
+        nodo_t* nodo_aux = iter->actual;
         void* dato_anterior = iter->actual->dato;
         iter->lista->nodo_fin = iter->anterior;
-        free(iter->actual);
-        iter->actual = NULL;
+        iter->actual = iter->actual->prox;
+        free(nodo_aux);
         iter->lista->largo--;
         return dato_anterior;
     } else {
@@ -187,7 +188,7 @@ bool lista_iter_avanzar(lista_iter_t *iter) {
 
 bool lista_iter_al_final(const lista_iter_t *iter) {
     if (lista_esta_vacia(iter->lista)) return true;
-    else return iter->actual == iter->lista->nodo_fin->prox;
+    else return iter->actual == NULL;
 }
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato) {
