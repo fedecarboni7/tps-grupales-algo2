@@ -177,7 +177,11 @@ void *lista_iter_borrar(lista_iter_t *iter) {
 bool lista_iter_avanzar(lista_iter_t *iter) {
     if (lista_iter_al_final(iter)) return false;
     iter->anterior = iter->actual;
-    iter->actual = iter->actual->prox;
+    if (iter->actual->prox == NULL) {
+        iter->actual = NULL;
+    } else {
+        iter->actual = iter->actual->prox;
+    }
     return true;
 }
 
