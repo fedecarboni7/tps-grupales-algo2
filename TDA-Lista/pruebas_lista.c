@@ -156,9 +156,18 @@ static void prueba_remover_ultimo(void) {
     print_test("Borro el último elemento", lista_iter_borrar(lista_iter) == &arreglo[1]);
     print_test("El último elemento de la lista es 1", lista_ver_ultimo(lista) == &arreglo[0]);
     print_test("El largo de la lista es igual a 1", lista_largo(lista) == 1);
-    print_test("Ver actual es igual a NULL", lista_iter_ver_actual(lista_iter) == NULL);
-
+    
     lista_iter_destruir(lista_iter);
+    lista_iter_t* lista_iter2 = lista_iter_crear(lista);
+    
+    print_test("Creo un nuevo iterador", lista_iter2 != NULL);
+    print_test("El actual es igual al primer elemento", lista_iter_ver_actual(lista_iter2) == &arreglo[0]);
+    print_test("Avanzo una posicion", lista_iter_avanzar(lista_iter2));
+    print_test("Me posiciono al final", lista_iter_al_final(lista_iter2));
+    print_test("Ver actual es igual a NULL", lista_iter_ver_actual(lista_iter2) == NULL);
+    print_test("Iter avanzar es false", !lista_iter_avanzar(lista_iter2));
+
+    lista_iter_destruir(lista_iter2);
     lista_destruir(lista, NULL);
 }
 
