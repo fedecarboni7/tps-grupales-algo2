@@ -29,6 +29,13 @@ unsigned long hash(unsigned char *str) {
     return hash;
 }
 
+void *hash_obtener(const hash_t *hash, const char *clave) {
+    bool pertenece = hash_pertenece(hash, clave);
+    int pos = hash(clave);
+
+    return pertenece ? lista_ver_primero(hash->tabla[pos]) : NULL; 
+}
+
 size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
     for(size_t i = 0; i < hash->m; i++) {
