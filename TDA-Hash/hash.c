@@ -16,6 +16,14 @@ typedef struct campo {
     void* dato;
 } campo_t;
 
+// Definición del struct hash_iter
+
+typedef struct hash_iter {
+    hash_t* hash;
+    lista_t* actual;
+    lista_t* anterior;
+} hash_iter_t;
+
 // Definición de la función de hashing elegida: DJB2
 // Fuente: https://softwareengineering.stackexchange.com/a/49566
 
@@ -32,8 +40,20 @@ unsigned long hash(unsigned char *str) {
 void *hash_obtener(const hash_t *hash, const char *clave) {
     bool pertenece = hash_pertenece(hash, clave);
     int pos = hash(clave);
+    void *dato = NULL;
 
-    return pertenece ? lista_ver_primero(hash->tabla[pos]) : NULL; 
+    if (pertenece) {
+        lista_iter_t *iter = lista_iter_crear(hash->lista[pos]);
+        while (lista_iter_ver_actual(iter)->clave != clave) {
+            lista_iter_avanzar(iter);
+            if (lista_iter_al_final(iter)) return NULL;
+        }
+
+        dato = lista_iter_ver_actual(iter)->dato;
+        lista_iter_destruir(iter);
+    }
+
+    return dato; 
 }
 
 size_t hash_cantidad(const hash_t *hash) {
