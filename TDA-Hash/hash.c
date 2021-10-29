@@ -20,8 +20,7 @@ typedef struct campo {
 
 typedef struct hash_iter {
     hash_t* hash;
-    lista_t* actual;
-    lista_t* anterior;
+    lista_iter_t* actual;
 } hash_iter_t;
 
 // Definición de la función de hashing elegida: DJB2
@@ -36,6 +35,10 @@ unsigned long hash(unsigned char *str) {
 
     return hash;
 }
+
+/* *****************************************************************
+ *                    PRIMITIVAS DEL HASH
+ * *****************************************************************/
 
 void *hash_obtener(const hash_t *hash, const char *clave) {
     bool pertenece = hash_pertenece(hash, clave);
@@ -69,4 +72,21 @@ size_t hash_cantidad(const hash_t *hash) {
         }
     }
     return cantidad; 
+}
+
+/* *****************************************************************
+ *                    PRIMITIVAS DEL ITERADOR
+ * *****************************************************************/
+
+hash_iter_t *hash_iter_crear(const hash_t *hash) {
+    hash_iter_t *iter = malloc(sizeof(hash_iter_t));
+    if (!iter) return NULL;
+    lista_t *lista;
+    int i = 0;
+    do {
+        lista = hash->tabla[i];
+        i++;
+    } while(lista_esta_vacia(lista));
+    iter->actual = lista_iter_crear(lista);
+    return iter;
 }
