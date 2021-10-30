@@ -61,6 +61,18 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
     return dato; 
 }
 
+bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
+    campo_t *campo = malloc(sizeof(campo_t));
+    if (!campo) return false; 
+    int pos = funcion_hash(clave) % hash->m; 
+    if (!hash_pertenece(hash, clave)) {
+        lista_t *lista = lista_crear();
+        hash->tabla[pos] = lista; 
+    }
+    lista_insertar_ultimo(hash->tabla[pos], campo);
+    return true;
+}
+
 size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
     for(size_t i = 0; i < hash->m; i++) {
