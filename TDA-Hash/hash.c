@@ -21,19 +21,20 @@ typedef struct campo {
 
 typedef struct hash_iter {
     hash_t* hash;
-    lista_iter_t* actual;
+    campo_t* actual;
 } hash_iter_t;
 
 // Definición de la función de hashing elegida: DJB2
 // Fuente: https://softwareengineering.stackexchange.com/a/49566
 
-unsigned long hash(unsigned char *str) {
+unsigned long funcion_hash(const char *str) {
     unsigned long hash = 5381;
     int c;
 
-    while (c = *str++)
+    while ((c = *str++)) {
         hash = ((hash << 5) + hash) + c;
-
+    }
+        
     return hash;
 }
 
@@ -43,11 +44,11 @@ unsigned long hash(unsigned char *str) {
 
 void *hash_obtener(const hash_t *hash, const char *clave) {
     bool pertenece = hash_pertenece(hash, clave);
-    int pos = hash(clave);
+    int pos = funcion_hash(clave) % hash->m;
     void *dato = NULL;
 
     if (pertenece) {
-        lista_iter_t *iter = lista_iter_crear(hash->lista[pos]);
+        lista_iter_t *iter = lista_iter_crear(hash->tabla[pos]);
         while (lista_iter_ver_actual(iter)->clave != clave) {
             lista_iter_avanzar(iter);
             if (lista_iter_al_final(iter)) return NULL;
@@ -63,8 +64,8 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
 size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
     for(size_t i = 0; i < hash->m; i++) {
-        if(hash->lista[i] && !lista_esta_vacia(hash->lista[i])) {
-            lista_iter_t *iter = lista_iter_crear(hash->lista[i]);
+        if(hash->tabla[i] && !lista_esta_vacia(hash->tabla[i])) {
+            lista_iter_t *iter = lista_iter_crear(hash->tabla[i]);
             while (lista_iter_ver_actual(iter)) {
                 lista_iter_avanzar(iter);
                 cantidad++;
