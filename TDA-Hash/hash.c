@@ -90,3 +90,8 @@ hash_iter_t *hash_iter_crear(const hash_t *hash) {
     iter->actual = lista_iter_crear(lista);
     return iter;
 }
+
+const char *hash_iter_ver_actual(const hash_iter_t *iter) {
+    if (hash_iter_al_final(iter)) return NULL;
+    return iter->actual->actual->clave; 
+}
