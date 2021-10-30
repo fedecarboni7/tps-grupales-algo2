@@ -1,4 +1,5 @@
 #include "hash.h"
+#include "lista.h"
 #include <stdlib.h>
 
 // Definición del struct hash
@@ -94,4 +95,9 @@ hash_iter_t *hash_iter_crear(const hash_t *hash) {
 const char *hash_iter_ver_actual(const hash_iter_t *iter) {
     if (hash_iter_al_final(iter)) return NULL;
     return iter->actual->actual->clave; 
+}
+
+void hash_iter_destruir(hash_iter_t *iter) {
+    lista_iter_destruir(iter->actual);
+    free(iter);
 }
