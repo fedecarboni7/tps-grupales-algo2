@@ -2,7 +2,8 @@
 #include "lista.h"
 #include <stdlib.h>
 
-#define FACTOR_CARGA 0.7
+#define FACTOR_CARGA_SUPERIOR 3
+#define FACTOR_CARGA_INFERIOR 1
 #define FACTOR_REDIMENSION_ARRIBA 2
 #define FACTOR_REDIMENSION_ABAJO 0.5
 
@@ -81,8 +82,12 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
 }
 
 bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
-    if ((float) hash_cantidad(hash) / (float) hash->m >= FACTOR_CARGA) {
+    float factor_carga = (float) hash_cantidad(hash) / (float) hash->m;
+    if (factor_carga >= FACTOR_CARGA_SUPERIOR) {
         redimensionar(hash, FACTOR_REDIMENSION_ARRIBA);
+    }
+    if (factor_carga < FACTOR_CARGA_INFERIOR) {
+        redimensionar(hash, FACTOR_REDIMENSION_ABAJO);
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false; 
