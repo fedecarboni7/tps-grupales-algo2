@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FACTOR_CARGA 0.7
+#define FACTOR_CARGA_SUPERIOR 3
+#define FACTOR_CARGA_INFERIOR 1
+#define FACTOR_REDIMENSION_ARRIBA 2
+#define FACTOR_REDIMENSION_ABAJO 0.5
 
 // Definición del struct hash
 
@@ -30,29 +33,32 @@ struct hash_iter {
 // Definición de la función de hashing elegida: DJB2
 // Fuente: https://softwareengineering.stackexchange.com/a/49566
 
-unsigned long funcion_hash(const char *str) {
-    unsigned long hash = 5381;
+size_t funcion_hash(const char *clave) {
+    size_t hash = 5381;
     int c;
 
-    while ((c = *str++)) {
+    while ((c = *clave++)) {
         hash = ((hash << 5) + hash) + c;
     }
         
     return hash;
 }
 
-void redimensionar(hash_t *hash) {
-    hash->m = hash->m * 2;
-    lista_t** nueva_tabla;
-    hash_iter_t *iter = hash_iter_crear(hash);
-    for (size_t i = 0; i < hash->m; i++) {
-        if(hash->tabla[i]) {
-            int pos = funcion_hash(hash_iter_ver_actual(iter)) % hash->m;
-            nueva_tabla[pos] = hash->tabla[i];
+void redimensionar(hash_t *hash, float factor) {
+    hash->m = hash->m * (size_t) factor;
+    lista_t** tabla_vieja = hash->tabla;
+    hash->tabla = malloc(sizeof(hash->m)); // Ver en hash_crear
+    for(size_t i = 0; i < hash->m; i++) {
+        if(tabla_vieja[i] && !lista_esta_vacia(tabla_vieja[i])) { // Corregir
+            lista_iter_t *iter = lista_iter_crear(tabla_vieja[i]);
+            while (!lista_iter_al_final(iter)) {
+                campo_t *actual = lista_iter_ver_actual(iter);
+                hash_guardar(hash, actual->clave, actual->dato);
+                lista_iter_avanzar(iter);
+            }
+            lista_iter_destruir(iter);
         }
     }
-    hash_iter_destruir(iter);
-    hash->tabla = nueva_tabla;
 }
 
 /* *****************************************************************
@@ -110,7 +116,7 @@ bool hash_pertenece(const hash_t *hash, const char *clave) {
 }
 
 void *hash_obtener(const hash_t *hash, const char *clave) {
-    int pos = funcion_hash(clave) % hash->m;
+    size_t pos = funcion_hash(clave) % hash->m;
     void *dato = NULL;
     if (hash_pertenece(hash, clave)) {
         lista_iter_t *iter = lista_iter_crear(hash->tabla[pos]);
@@ -127,12 +133,16 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
 }
 
 bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
-    if ((float) hash_cantidad(hash) / (float) hash->m >= FACTOR_CARGA) {
-        redimensionar(hash);
+    float factor_carga = (float) hash_cantidad(hash) / (float) hash->m;
+    if (factor_carga >= FACTOR_CARGA_SUPERIOR) {
+        redimensionar(hash, FACTOR_REDIMENSION_ARRIBA);
+    }
+    if (factor_carga < FACTOR_CARGA_INFERIOR) {
+        redimensionar(hash, FACTOR_REDIMENSION_ABAJO);
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false; 
-    int pos = funcion_hash(clave) % hash->m; 
+    size_t pos = funcion_hash(clave) % hash->m; 
     if (!hash_pertenece(hash, clave)) {
         lista_t *lista = lista_crear();
         hash->tabla[pos] = lista; 
