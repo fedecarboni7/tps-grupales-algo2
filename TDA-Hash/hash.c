@@ -67,14 +67,14 @@ void redimensionar(hash_t *hash, float factor) {
 
 hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
     hash_t* hash = malloc(sizeof(hash_t));
-    if(!hash) return NULL;
+    if (!hash) return NULL;
     hash->m = 7;
     hash->tabla = malloc(sizeof(lista_t*) * hash->m);
-    if(!hash->tabla) {
+    if (!hash->tabla) {
         free(hash);
         return NULL;
     }
-    for(size_t i = 0; i < hash->m; i++) {
+    for (size_t i = 0; i < hash->m; i++) {
         hash->tabla[i] = lista_crear();
     }
     hash->destruir_dato = destruir_dato;
@@ -84,10 +84,10 @@ hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
 void *hash_borrar(hash_t *hash, const char *clave) {
     size_t pos = funcion_hash(clave) % hash->m;
     lista_iter_t* iter = lista_iter_crear(hash->tabla[pos]);
-    if(!iter) return NULL;
+    if (!iter) return NULL;
     campo_t* campo;
-    while((campo = lista_iter_ver_actual(iter))) {
-        if(!strcmp(campo->clave, clave)) {
+    while ((campo = lista_iter_ver_actual(iter))) {
+        if (!strcmp(campo->clave, clave)) {
             void* dato = campo->dato;
             lista_iter_borrar(iter);
             lista_iter_destruir(iter);
@@ -102,10 +102,10 @@ void *hash_borrar(hash_t *hash, const char *clave) {
 bool hash_pertenece(const hash_t *hash, const char *clave) {
     size_t pos = funcion_hash(clave) % hash->m;
     lista_iter_t* iter = lista_iter_crear(hash->tabla[pos]);
-    if(!iter) return NULL;
+    if (!iter) return NULL;
     campo_t* campo;
-    while((campo = lista_iter_ver_actual(iter))) {
-        if(!strcmp(campo->clave, clave)) {
+    while ((campo = lista_iter_ver_actual(iter))) {
+        if (!strcmp(campo->clave, clave)) {
             lista_iter_destruir(iter);
             return true;
         }
