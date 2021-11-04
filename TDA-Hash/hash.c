@@ -142,7 +142,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false; 
-    campo->clave = strdup(clave);
+    campo->clave = strndup(clave);
     campo->dato = dato;
     size_t pos = funcion_hash(clave) % hash->m; 
     if (!hash_pertenece(hash, clave)) {
