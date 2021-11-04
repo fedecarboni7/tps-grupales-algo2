@@ -27,7 +27,7 @@ typedef struct campo {
 
 struct hash_iter {
     hash_t* hash;
-    campo_t* actual;
+    lista_iter_t *actual;
 };
 
 // Definición de la función de hashing elegida: DJB2
@@ -47,9 +47,9 @@ size_t funcion_hash(const char *clave) {
 void redimensionar(hash_t *hash, float factor) {
     hash->m = hash->m * (size_t) factor;
     lista_t** tabla_vieja = hash->tabla;
-    hash->tabla = malloc(sizeof(hash->m)); // Ver en hash_crear
+    hash->tabla = malloc(sizeof(lista_t*) * hash->m);
     for(size_t i = 0; i < hash->m; i++) {
-        if(tabla_vieja[i] && !lista_esta_vacia(tabla_vieja[i])) { // Corregir
+        if(!lista_esta_vacia(tabla_vieja[i])) {
             lista_iter_t *iter = lista_iter_crear(tabla_vieja[i]);
             while (!lista_iter_al_final(iter)) {
                 campo_t *actual = lista_iter_ver_actual(iter);
@@ -142,6 +142,8 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false; 
+    campo->clave = strdup(clave);
+    campo->dato = dato;
     size_t pos = funcion_hash(clave) % hash->m; 
     if (!hash_pertenece(hash, clave)) {
         lista_t *lista = lista_crear();
@@ -154,7 +156,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
 size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
     for(size_t i = 0; i < hash->m; i++) {
-        if(hash->tabla[i] && !lista_esta_vacia(hash->tabla[i])) { // Corregir
+        if(!lista_esta_vacia(hash->tabla[i])) {
             lista_iter_t *iter = lista_iter_crear(hash->tabla[i]);
             while (lista_iter_ver_actual(iter)) {
                 lista_iter_avanzar(iter);
@@ -187,7 +189,8 @@ hash_iter_t *hash_iter_crear(const hash_t *hash) {
         lista = hash->tabla[i];
         i++;
     } while(lista_esta_vacia(lista));
-    // Asigno a iter->actual
+    lista_iter_t *lista_iter = lista_iter_crear(lista);
+    iter->actual = lista_iter_ver_actual(lista_iter);
     return iter;
 }
 
