@@ -26,7 +26,8 @@ typedef struct campo {
 // Definición del struct hash_iter
 
 struct hash_iter {
-    hash_t* hash;
+    const hash_t* hash;
+    size_t indice;
     lista_iter_t *actual;
 };
 
@@ -142,7 +143,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false; 
-    campo->clave = strdup(clave);
+    strcpy((char*) campo->clave, clave);
     campo->dato = dato;
     size_t pos = funcion_hash(clave) % hash->m; 
     if (!hash_pertenece(hash, clave)) {
@@ -184,29 +185,45 @@ hash_iter_t *hash_iter_crear(const hash_t *hash) {
     hash_iter_t *iter = malloc(sizeof(hash_iter_t));
     if (!iter) return NULL;
     lista_t *lista;
-    int i = 0;
+    size_t i = 0;
     do {
         lista = hash->tabla[i];
         i++;
     } while(lista_esta_vacia(lista));
     lista_iter_t *lista_iter = lista_iter_crear(lista);
-    iter->actual = lista_iter_ver_actual(lista_iter);
+    if (!lista_iter) return NULL;
+    iter->actual = lista_iter;
+    iter->indice = i;
     return iter;
 }
 
 bool hash_iter_avanzar(hash_iter_t *iter) {
     if (hash_iter_al_final(iter)) return false;
-    lista_iter_avanzar(lista_iter_crear(iter->hash->tabla));
+    if (lista_iter_al_final(iter->actual)) {
+        lista_iter_destruir(iter->actual);
+        lista_t* lista;
+        size_t i = iter->indice;
+        do {
+            lista = iter->hash->tabla[i];
+            i++;
+        } while(lista_esta_vacia(lista));
+        lista_iter_t *lista_iter = lista_iter_crear(lista);
+        if (!lista_iter) return false;
+        iter->actual = lista_iter;
+        iter->indice = i;   
+    } else {
+        lista_iter_avanzar(iter->actual);
+    }
     return true;
 }
 
 bool hash_iter_al_final(const hash_iter_t *iter) {
-    return lista_iter_al_final(iter);
+    return iter->indice == iter->hash->m - 1 && lista_iter_al_final(iter->actual);
 }
 
 const char *hash_iter_ver_actual(const hash_iter_t *iter) {
     if (hash_iter_al_final(iter)) return NULL;
-    return iter->actual->clave; 
+    return lista_iter_ver_actual(iter->actual); 
 }
 
 void hash_iter_destruir(hash_iter_t *iter) {
