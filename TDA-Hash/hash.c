@@ -45,6 +45,20 @@ size_t funcion_hash(const char *clave) {
     return hash;
 }
 
+char *strndup(const char *str, size_t chars) {
+    char *buffer;
+    size_t n;
+
+    buffer = (char *) malloc(chars +1);
+    if (buffer)
+    {
+        for (n = 0; ((n < chars) && (str[n] != 0)) ; n++) buffer[n] = str[n];
+        buffer[n] = 0;
+    }
+
+    return buffer;
+}
+
 void redimensionar(hash_t *hash, float factor) {
     hash->m = hash->m * (size_t) factor;
     lista_t** tabla_vieja = hash->tabla;
@@ -143,7 +157,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false; 
-    campo->clave = strndup(clave);
+    campo->clave = strndup(clave, strlen(clave));
     campo->dato = dato;
     size_t pos = funcion_hash(clave) % hash->m; 
     if (!hash_pertenece(hash, clave)) {
