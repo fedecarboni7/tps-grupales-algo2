@@ -1,6 +1,7 @@
 #include "hash.h"
 #include "lista.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #define FACTOR_CARGA_SUPERIOR 3
@@ -142,8 +143,8 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
         redimensionar(hash, FACTOR_REDIMENSION_ABAJO);
     }
     campo_t *campo = malloc(sizeof(campo_t));
-    if (!campo) return false; 
-    campo->clave = strndup(clave);
+    if (!campo) return false;
+    campo->clave = strdup(clave);
     campo->dato = dato;
     size_t pos = funcion_hash(clave) % hash->m; 
     if (!hash_pertenece(hash, clave)) {
