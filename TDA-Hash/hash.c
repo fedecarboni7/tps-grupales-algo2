@@ -64,7 +64,7 @@ void redimensionar(hash_t *hash, float factor) {
     hash->m = hash->m * (size_t) factor;
     lista_t** tabla_vieja = hash->tabla;
     hash->tabla = malloc(sizeof(lista_t*) * hash->m);
-    for(size_t i = 0; i < hash->m; i++) {
+    for (size_t i = 0; i < hash->m; i++) {
         if(!lista_esta_vacia(tabla_vieja[i])) {
             lista_iter_t *iter = lista_iter_crear(tabla_vieja[i]);
             while (!lista_iter_al_final(iter)) {
@@ -160,7 +160,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     if (!campo) return false;
     campo->clave = strndup(clave, strlen(clave));
     campo->dato = dato;
-    size_t pos = funcion_hash(clave) % hash->m; 
+    size_t pos = funcion_hash(clave) % hash->m; // por alguna razón el hash->m queda en 0 y por eso no puede dividirse
     if (!hash_pertenece(hash, clave)) {
         lista_t *lista = lista_crear();
         hash->tabla[pos] = lista; 
@@ -197,8 +197,12 @@ void hash_destruir(hash_t *hash) {
  * *****************************************************************/
 
 hash_iter_t *hash_iter_crear(const hash_t *hash) {
-    hash_iter_t *iter = malloc(sizeof(hash_iter_t));
+    hash_iter_t *iter = calloc(1, sizeof(hash_iter_t));
     if (!iter) return NULL;
+    if (hash_cantidad(hash) == 0) {
+        iter->hash = hash;
+        return iter;
+    }
     lista_t *lista;
     size_t i = 0;
     do {
@@ -206,7 +210,10 @@ hash_iter_t *hash_iter_crear(const hash_t *hash) {
         i++;
     } while(lista_esta_vacia(lista));
     lista_iter_t *lista_iter = lista_iter_crear(lista);
-    if (!lista_iter) return NULL;
+    if (!lista_iter) {
+        free(iter);
+        return NULL;
+    }
     iter->actual = lista_iter;
     iter->indice = i;
     return iter;
@@ -233,6 +240,7 @@ bool hash_iter_avanzar(hash_iter_t *iter) {
 }
 
 bool hash_iter_al_final(const hash_iter_t *iter) {
+    if (hash_cantidad(iter->hash) == 0) return true;
     return iter->indice == iter->hash->m - 1 && lista_iter_al_final(iter->actual);
 }
 
