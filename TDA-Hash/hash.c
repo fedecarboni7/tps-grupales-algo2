@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#define TAMANIO_INICIAL 7
 #define FACTOR_CARGA_SUPERIOR 3
 #define FACTOR_CARGA_INFERIOR 1
 #define FACTOR_REDIMENSION_ARRIBA 2
@@ -153,14 +154,14 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     if (factor_carga >= FACTOR_CARGA_SUPERIOR) {
         redimensionar(hash, FACTOR_REDIMENSION_ARRIBA);
     }
-    if (factor_carga < FACTOR_CARGA_INFERIOR) {
+    if (factor_carga < FACTOR_CARGA_INFERIOR && hash->m > TAMANIO_INICIAL) { //Borrar: defino TAMANIO_INICIAL como 7 para que no se redimensione menos que eso
         redimensionar(hash, FACTOR_REDIMENSION_ABAJO);
     }
     campo_t *campo = malloc(sizeof(campo_t));
     if (!campo) return false;
     campo->clave = strndup(clave, strlen(clave));
     campo->dato = dato;
-    size_t pos = funcion_hash(clave) % hash->m; // por alguna razón el hash->m queda en 0 y por eso no puede dividirse
+    size_t pos = funcion_hash(clave) % hash->m;
     if (!hash_pertenece(hash, clave)) {
         lista_t *lista = lista_crear();
         hash->tabla[pos] = lista; 
