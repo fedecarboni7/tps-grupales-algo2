@@ -140,9 +140,11 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
         campo_t *actual = lista_iter_ver_actual(iter);
         while (actual->clave != clave) {
             lista_iter_avanzar(iter);
-            if (lista_iter_al_final(iter)) return NULL;
+            if (lista_iter_al_final(iter)) {
+                lista_iter_destruir(iter);
+                return NULL;
+            }
         }
-
         dato = actual->dato;
         lista_iter_destruir(iter);
     }
@@ -154,7 +156,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     if (factor_carga >= FACTOR_CARGA_SUPERIOR) {
         redimensionar(hash, FACTOR_REDIMENSION_ARRIBA);
     }
-    if (factor_carga < FACTOR_CARGA_INFERIOR && hash->m > TAMANIO_INICIAL) { //Borrar: defino TAMANIO_INICIAL como 7 para que no se redimensione menos que eso
+    if (factor_carga < FACTOR_CARGA_INFERIOR && hash->m > TAMANIO_INICIAL) {
         redimensionar(hash, FACTOR_REDIMENSION_ABAJO);
     }
     campo_t *campo = malloc(sizeof(campo_t));
@@ -172,8 +174,8 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
 
 size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
-    for(size_t i = 0; i < hash->m; i++) {
-        if(!lista_esta_vacia(hash->tabla[i])) {
+    for (size_t i = 0; i < hash->m; i++) {
+        if (!lista_esta_vacia(hash->tabla[i])) {
             lista_iter_t *iter = lista_iter_crear(hash->tabla[i]);
             while (lista_iter_ver_actual(iter)) {
                 lista_iter_avanzar(iter);
@@ -182,7 +184,7 @@ size_t hash_cantidad(const hash_t *hash) {
             lista_iter_destruir(iter);
         }
     }
-    return cantidad; 
+    return cantidad;
 }
 
 void hash_destruir(hash_t *hash) {
