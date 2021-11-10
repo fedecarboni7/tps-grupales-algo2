@@ -137,13 +137,10 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
     void *dato = NULL;
     if (hash_pertenece(hash, clave)) {
         lista_iter_t *iter = lista_iter_crear(hash->tabla[pos]);
-        campo_t *actual = lista_iter_ver_actual(iter);
-        while (actual->clave != clave) {
+        campo_t *actual; 
+        while (!lista_iter_al_final(iter)) {
+            actual = lista_iter_ver_actual(iter);
             lista_iter_avanzar(iter);
-            if (lista_iter_al_final(iter)) {
-                lista_iter_destruir(iter);
-                return NULL;
-            }
         }
         dato = actual->dato;
         lista_iter_destruir(iter);
@@ -178,8 +175,8 @@ size_t hash_cantidad(const hash_t *hash) {
         if (!lista_esta_vacia(hash->tabla[i])) {
             lista_iter_t *iter = lista_iter_crear(hash->tabla[i]);
             while (lista_iter_ver_actual(iter)) {
-                lista_iter_avanzar(iter);
                 cantidad++;
+                lista_iter_avanzar(iter);
             }
             lista_iter_destruir(iter);
         }
