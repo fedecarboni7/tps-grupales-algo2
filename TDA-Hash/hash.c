@@ -173,12 +173,7 @@ size_t hash_cantidad(const hash_t *hash) {
     size_t cantidad = 0;
     for (size_t i = 0; i < hash->m; i++) {
         if (!lista_esta_vacia(hash->tabla[i])) {
-            lista_iter_t *iter = lista_iter_crear(hash->tabla[i]);
-            while (lista_iter_ver_actual(iter)) {
-                cantidad++;
-                lista_iter_avanzar(iter);
-            }
-            lista_iter_destruir(iter);
+            cantidad += lista_largo(hash->tabla[i]);
         }
     }
     return cantidad;
