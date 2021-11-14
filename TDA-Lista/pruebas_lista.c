@@ -71,7 +71,7 @@ static void prueba_de_volumen(void) {
 
     for (int i = 999; i >= 0; i--) {
         if (i == 0) {
-            resultado = lista_borrar_primero(lista) == &dato && lista_esta_vacia(lista);
+            resultado = resultado && lista_borrar_primero(lista) == &dato && lista_esta_vacia(lista);
             break;
         }
         resultado &= lista_borrar_primero(lista) == &dato;
@@ -182,8 +182,8 @@ static void prueba_remover_ultimo(void) {
     
     int arreglo[] = {1, 2};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_ultimo(lista, &arreglo[1]);
+    print_test("Insertar 1 es true", lista_insertar_primero(lista, &arreglo[0]));
+    print_test("Insertar 2 es true", lista_insertar_primero(lista, &arreglo[1]));
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
@@ -214,9 +214,9 @@ static void prueba_remover_del_medio(void) {
     lista_t *lista = lista_crear();
     int arreglo[] = {1, 3, 5};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_primero(lista, &arreglo[1]);
-    lista_insertar_primero(lista, &arreglo[2]);
+    print_test("Insertar 1 es true", lista_insertar_primero(lista, &arreglo[0]));
+    print_test("Insertar 3 es true", lista_insertar_primero(lista, &arreglo[1]));
+    print_test("Insertar 5 es true", lista_insertar_primero(lista, &arreglo[2]));
 
     lista_iter_t *iter_1 = lista_iter_crear(lista);
 
@@ -242,8 +242,8 @@ static void prueba_insertar_al_principio(void) {
 
     int arreglo[] = {2, 5, 6};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_primero(lista, &arreglo[1]);
+    print_test("Insertar 2 es true", lista_insertar_primero(lista, &arreglo[0]));
+    print_test("Insertar 5 es true", lista_insertar_primero(lista, &arreglo[1]));
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
@@ -262,8 +262,8 @@ static void prueba_insertar_al_final(void) {
 
     int arreglo[] = {2, 5, 6};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_primero(lista, &arreglo[1]);
+    print_test("Insertar 2 es true", lista_insertar_primero(lista, &arreglo[0]));
+    print_test("Insertar 5 es true", lista_insertar_primero(lista, &arreglo[1]));
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
@@ -284,10 +284,10 @@ static void prueba_insertar_en_el_medio(void) {
 
     int arreglo[] = {0, 2, 5, 6, 7};
 
-    lista_insertar_ultimo(lista, &arreglo[0]);
-    lista_insertar_ultimo(lista, &arreglo[1]);
-    lista_insertar_ultimo(lista, &arreglo[3]);
-    lista_insertar_ultimo(lista, &arreglo[4]);
+    print_test("Insertar 0 es true", lista_insertar_primero(lista, &arreglo[0]));
+    print_test("Insertar 2 es true", lista_insertar_primero(lista, &arreglo[1]));
+    print_test("Insertar 6 es true", lista_insertar_primero(lista, &arreglo[3]));
+    print_test("Insertar 7 es true", lista_insertar_primero(lista, &arreglo[4]));
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
@@ -310,9 +310,11 @@ static void prueba_imprimir_con_corte(void) {
     printf("\nINICIO DE PRUEBAS IMPRIMIR ELEMENTOS\n");
     int arreglo[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     lista_t *lista = lista_crear();
+    bool resultado = true;
 
     for (int i = 0; i < 10; i++) {
-        print_test("Insertar ultimo es true", lista_insertar_ultimo(lista, (void*) &arreglo[i])); 
+        resultado = lista_insertar_ultimo(lista, (void*) &arreglo[i]);
+        if (!resultado) break; 
     }
 
     int extra = 0;
@@ -324,9 +326,11 @@ static void prueba_sumar_sin_corte(void) {
     printf("\nINICIO DE PRUEBAS SUMAR ELEMENTOS\n");
     int arreglo[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     lista_t *lista = lista_crear();
+    bool resultado = true;
 
     for (int i = 0; i < 10; i++) {
-        print_test("Insertar ultimo es true", lista_insertar_ultimo(lista, (void*) &arreglo[i])); 
+        resultado = lista_insertar_ultimo(lista, (void*) &arreglo[i]); 
+        if (!resultado) break;
     }
 
     int suma = 0;
