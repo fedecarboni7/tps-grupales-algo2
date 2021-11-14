@@ -74,7 +74,7 @@ static void prueba_de_volumen(void) {
             resultado = lista_borrar_primero(lista) == &dato && lista_esta_vacia(lista);
             break;
         }
-        resultado = lista_borrar_primero(lista) == &dato;
+        resultado &= lista_borrar_primero(lista) == &dato;
         if (!resultado) break;
     }
     print_test("Puedo borrar todos los elementos", resultado);
@@ -100,8 +100,45 @@ void pila_destruir_wrapper(void* pila) {
     pila_destruir(pila);
 }
 
-static void prueba_destruccion(void) {
-    printf("\nINICIO DE PRUEBAS DESTRUCCIÓN\n");
+
+static void prueba_destruccion_lista_vacia_funcion_NULL(void) {
+    printf("\nINICIO DE PRUEBA DESTRUCCION LISTA VACIA FUNCION NULL\n");
+
+    lista_t *lista = lista_crear();
+
+    print_test("Crear lista", lista != NULL);
+    print_test("La lista está vacía", lista_esta_vacia(lista));
+    
+    lista_destruir(lista, NULL);
+}
+
+static void prueba_destruccion_lista_vacia_funcion_NO_NULL(void) {
+    printf("\nINICIO DE PRUEBA DESTRUCCION LISTA VACIA FUNCION NO NULL\n");
+
+    lista_t *lista = lista_crear();
+
+    print_test("Crear lista", lista != NULL);
+    print_test("La lista está vacía", lista_esta_vacia(lista));
+
+    lista_destruir(lista, free);
+}
+
+static void prueba_destruccion_lista_NO_vacia_funcion_NULL(void) {
+    printf("\nINICIO DE PRUEBA DESTRUCCION LISTA NO VACIA FUNCION NULL\n");
+
+    lista_t *lista = lista_crear();
+    bool resultado = true;
+
+    for (int i = 0; i <= 10; i++) {
+        resultado = lista_insertar_ultimo(lista, &i);
+        if (!resultado) break;
+    }
+
+    lista_destruir(lista, NULL);
+}
+
+static void prueba_destruccion_lista_NO_vacia_funcion_NO_NULL(void) {
+    printf("\nINICIO DE PRUEBA DESTRUCCION LISTA NO VACIA FUNCION NO NULL\n");
 
     pila_t *pila = pila_crear();
     lista_t *lista = lista_crear();
@@ -125,9 +162,9 @@ static void prueba_remover_al_crear(void) {
 
     int arreglo[] = {2, 5, 6};
 
-    lista_insertar_primero(lista, &arreglo[0]);
-    lista_insertar_ultimo(lista, &arreglo[1]);
-    lista_insertar_ultimo(lista, &arreglo[2]);
+    print_test("Insertar 2 es true", lista_insertar_primero(lista, &arreglo[0]));
+    print_test("Insertar 5 es true", lista_insertar_primero(lista, &arreglo[1]));
+    print_test("Insertar 6 es true", lista_insertar_primero(lista, &arreglo[2]));
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
@@ -275,7 +312,7 @@ static void prueba_imprimir_con_corte(void) {
     lista_t *lista = lista_crear();
 
     for (int i = 0; i < 10; i++) {
-        lista_insertar_ultimo(lista, (void*) &arreglo[i]); 
+        print_test("Insertar ultimo es true", lista_insertar_ultimo(lista, (void*) &arreglo[i])); 
     }
 
     int extra = 0;
@@ -289,7 +326,7 @@ static void prueba_sumar_sin_corte(void) {
     lista_t *lista = lista_crear();
 
     for (int i = 0; i < 10; i++) {
-        lista_insertar_ultimo(lista, (void*) &arreglo[i]);
+        print_test("Insertar ultimo es true", lista_insertar_ultimo(lista, (void*) &arreglo[i])); 
     }
 
     int suma = 0;
@@ -319,7 +356,10 @@ void pruebas_lista_estudiante() {
     prueba_agregar_elementos();
     prueba_de_volumen();
     prueba_insertar_NULL();
-    prueba_destruccion();
+    prueba_destruccion_lista_NO_vacia_funcion_NO_NULL();
+    prueba_destruccion_lista_NO_vacia_funcion_NULL();
+    prueba_destruccion_lista_vacia_funcion_NO_NULL();
+    prueba_destruccion_lista_vacia_funcion_NULL();
     printf("\nINICIO PRUEBAS CASOS ITERADOR INTERNO\n");
     prueba_imprimir_con_corte();
     prueba_sumar_sin_corte();
