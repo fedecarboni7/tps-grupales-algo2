@@ -105,7 +105,8 @@ void *hash_borrar(hash_t *hash, const char *clave) {
     campo_t* campo;
     while ((campo = lista_iter_ver_actual(iter))) {
         if (!strcmp(campo->clave, clave)) {
-            void* dato = campo->dato;
+            void* dato = campo->dato; 
+            free((void*) campo->clave); 
             lista_iter_borrar(iter);
             lista_iter_destruir(iter);
             return dato;
@@ -179,9 +180,14 @@ size_t hash_cantidad(const hash_t *hash) {
     return cantidad;
 }
 
+void campo_destruir(campo_t* campo) {
+    free((char*) campo->clave);
+    free(campo);
+}
+
 void hash_destruir(hash_t *hash) {
     for(size_t i = 0; i < hash->m; i++) {
-        lista_destruir(hash->tabla[i], hash->destruir_dato);
+        lista_destruir(hash->tabla[i], (void*) campo_destruir);
     }
     free(hash->tabla);
     free(hash);
