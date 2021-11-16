@@ -31,7 +31,6 @@ struct lista_iter {
 
 lista_t *lista_crear(void) {
     lista_t *lista = malloc(sizeof(lista_t));
-    if (!lista) return NULL;
     lista->largo = 0;
     lista->nodo_inicio = NULL;
     lista->nodo_fin = NULL;
@@ -53,7 +52,7 @@ void* nodo_destruir(nodo_t *nodo) {
 }
 
 bool lista_esta_vacia(const lista_t *lista) {
-    return lista->largo == 0 && !lista->nodo_inicio && !lista->nodo_fin;
+    return lista->largo == 0;
 }
 
 void lista_destruir(lista_t *lista, void (*destruir_dato)(void *)) {
@@ -97,12 +96,9 @@ void *lista_borrar_primero(lista_t *lista) {
     void* dato_anterior = lista->nodo_inicio->dato;
     nodo_t* nodo_aux = lista->nodo_inicio;
     if (lista->largo == 1) {
-        lista->nodo_inicio = NULL;
         lista->nodo_fin = NULL;
     }
-    else {
-        lista->nodo_inicio = lista->nodo_inicio->prox;
-    }
+    lista->nodo_inicio = lista->nodo_inicio->prox;
     lista->largo--;
     free(nodo_aux);
     return dato_anterior;
@@ -153,6 +149,7 @@ void lista_iter_destruir(lista_iter_t *iter) {
 }
 
 void *lista_iter_borrar(lista_iter_t *iter) {
+    if (lista_esta_vacia(iter->lista)) return NULL;
     if (lista_iter_al_final(iter)) return NULL;
     if (iter->actual == iter->lista->nodo_inicio) {
         lista_iter_avanzar(iter);
@@ -175,11 +172,7 @@ void *lista_iter_borrar(lista_iter_t *iter) {
 bool lista_iter_avanzar(lista_iter_t *iter) {
     if (lista_iter_al_final(iter)) return false;
     iter->anterior = iter->actual;
-    if (iter->actual == iter->lista->nodo_fin) {
-        iter->actual = NULL;
-    } else {
-        iter->actual = iter->actual->prox;
-    }
+    iter->actual = iter->actual->prox;
     return true;
 }
 

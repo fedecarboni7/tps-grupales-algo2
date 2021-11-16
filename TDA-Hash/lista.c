@@ -96,12 +96,9 @@ void *lista_borrar_primero(lista_t *lista) {
     void* dato_anterior = lista->nodo_inicio->dato;
     nodo_t* nodo_aux = lista->nodo_inicio;
     if (lista->largo == 1) {
-        lista->nodo_inicio = NULL;
         lista->nodo_fin = NULL;
     }
-    else {
-        lista->nodo_inicio = lista->nodo_inicio->prox;
-    }
+    lista->nodo_inicio = lista->nodo_inicio->prox;
     lista->largo--;
     free(nodo_aux);
     return dato_anterior;
@@ -175,11 +172,7 @@ void *lista_iter_borrar(lista_iter_t *iter) {
 bool lista_iter_avanzar(lista_iter_t *iter) {
     if (lista_iter_al_final(iter)) return false;
     iter->anterior = iter->actual;
-    if (iter->actual == iter->lista->nodo_fin) {
-        iter->actual = NULL;
-    } else {
-        iter->actual = iter->actual->prox;
-    }
+    iter->actual = iter->actual->prox;
     return true;
 }
 
