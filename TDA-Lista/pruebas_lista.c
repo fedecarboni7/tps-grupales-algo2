@@ -26,7 +26,6 @@ static void prueba_lista_vacia(void) {
     printf("\nCONDICIÓN DE BORDE\n");
     print_test("La lista está vacía", lista_esta_vacia(lista));
     print_test("Borrar un elemento de una lista vacía devuelve NULL", lista_borrar_primero(lista) == NULL);
-    print_test("Borrar un elemento de una lista vacía devuelve NULL", lista_borrar_ultimo(lista) == NULL);
     print_test("Ver el primer elemento de una lista vacía devuelve NULL", lista_ver_primero(lista) == NULL);
     print_test("Ver el último elemento de una lista vacía devuelve NULL", lista_ver_ultimo(lista) == NULL);
     print_test("La lista tiene 0 elementos", lista_largo(lista) == 0);
