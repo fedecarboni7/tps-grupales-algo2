@@ -169,7 +169,7 @@ static void prueba_remover_al_crear(void) {
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
-    print_test("Remuevo el primer elemento", lista_iter_borrar(lista_iter) == &arreglo[0]);
+    print_test("Remuevo el primer elemento", lista_iter_borrar(lista_iter) == &arreglo[2]);
     print_test("El primer elemento de la lista es 5", lista_ver_primero(lista) == &arreglo[1]);
 
     lista_iter_destruir(lista_iter);
@@ -184,7 +184,7 @@ static void prueba_remover_ultimo(void) {
     int arreglo[] = {1, 2};
 
     print_test("Insertar 1 es true", lista_insertar_primero(lista, &arreglo[0]));
-    print_test("Insertar 2 es true", lista_insertar_primero(lista, &arreglo[1]));
+    print_test("Insertar 2 es true", lista_insertar_ultimo(lista, &arreglo[1]));
     
     lista_iter_t *lista_iter = lista_iter_crear(lista);
 
@@ -292,7 +292,7 @@ static void prueba_insertar_en_el_medio(void) {
     
     lista_iter_t *iter = lista_iter_crear(lista);
     
-    print_test("Me posiciono en el medio de la lista", lista_iter_avanzar(iter) && lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[3]);
+    print_test("Me posiciono en el medio de la lista", lista_iter_avanzar(iter) && lista_iter_avanzar(iter) && lista_iter_ver_actual(iter) == &arreglo[1]);
     print_test("Inserto un elemento en el medio de la lista", lista_iter_insertar(iter, &arreglo[2]));
 
     lista_iter_destruir(iter);
