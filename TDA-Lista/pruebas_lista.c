@@ -2,6 +2,7 @@
 #include "pila.h"
 #include "testing.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 bool imprimir(void* dato, void* extra) {
     if (*(int*) extra == 5) {
