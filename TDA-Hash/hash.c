@@ -47,24 +47,13 @@ size_t funcion_hash(const char *clave) {
     return hash;
 }
 
-char *strndup(const char *str, size_t chars) {
-    char *buffer;
-    size_t n;
-
-    buffer = (char *) malloc(chars +1);
-    if (buffer)
-    {
-        for (n = 0; ((n < chars) && (str[n] != 0)) ; n++) buffer[n] = str[n];
-        buffer[n] = 0;
-    }
-
-    return buffer;
-}
-
 void redimensionar(hash_t *hash, float factor) {
     hash->m = hash->m * (size_t) factor;
     lista_t** tabla_vieja = hash->tabla;
     hash->tabla = malloc(sizeof(lista_t*) * hash->m);
+    for (size_t i = 0; i < hash->m; i++) {
+        hash->tabla[i] = lista_crear();
+    }
     for (size_t i = 0; i < hash->m; i++) {
         if(!lista_esta_vacia(tabla_vieja[i])) {
             lista_iter_t *iter = lista_iter_crear(tabla_vieja[i]);
@@ -76,6 +65,11 @@ void redimensionar(hash_t *hash, float factor) {
             lista_iter_destruir(iter);
         }
     }
+}
+
+void campo_destruir(campo_t* campo) {
+    free((char*) campo->clave);
+    free(campo);
 }
 
 /* *****************************************************************
@@ -106,7 +100,7 @@ void *hash_borrar(hash_t *hash, const char *clave) {
     while ((campo = lista_iter_ver_actual(iter))) {
         if (!strcmp(campo->clave, clave)) {
             void* dato = campo->dato; 
-            free((void*) campo->clave); 
+            campo_destruir(campo);
             lista_iter_borrar(iter);
             lista_iter_destruir(iter);
             return dato;
@@ -162,10 +156,6 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
     campo->clave = strndup(clave, strlen(clave));
     campo->dato = dato;
     size_t pos = funcion_hash(clave) % hash->m;
-    if (!hash_pertenece(hash, clave)) {
-        lista_t *lista = lista_crear();
-        hash->tabla[pos] = lista; 
-    }
     lista_insertar_ultimo(hash->tabla[pos], campo);
     return true;
 }
@@ -178,11 +168,6 @@ size_t hash_cantidad(const hash_t *hash) {
         }
     }
     return cantidad;
-}
-
-void campo_destruir(campo_t* campo) {
-    free((char*) campo->clave);
-    free(campo);
 }
 
 void hash_destruir(hash_t *hash) {
